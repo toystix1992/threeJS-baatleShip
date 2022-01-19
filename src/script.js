@@ -6,6 +6,7 @@ import { Water } from 'three/examples/jsm/objects/Water2';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 let scene, camera, clock, renderer, water;
+let rotationTo = 0;
 
 let ship
 const ships = ['ships/large.glb', 'ships/medium.gltf', 'ships/small.gltf'];
@@ -16,10 +17,10 @@ const params = {
     flowX: 1,
     flowY: 1
 };
-const shipParams = {
-    rotationY: 1
-}
-
+//
+//     rotationFrom: -0.2,
+//     rotationTo: 0.2
+//
 init();
 animate();
 
@@ -45,8 +46,10 @@ function init() {
             loader.load(link, ( gltf ) => {
                 ship = gltf.scene;
                 scene.add(ship);
-                console.log(ship);
                 ship.position.set(idx*3, 0.6 ,0);
+                console.log(ship);
+                ship.rotation._y = rotationTo;
+                console.log(rotationTo);
             }, undefined, ( error ) => {
                 console.error(error);
             });
@@ -176,7 +179,14 @@ function animate() {
 function render() {
 
     const delta = clock.getDelta();
-    // shipParams.rotationY += delta;
+    // console.log(rotationTo);
+    // rotationTo -= 0.01;
+    // if(rotationTo >= 0.2) {
+    //     rotationTo -= 0.01;
+    // } else if (rotationTo <= - 0.2) {
+    //     rotationTo += 0.01;
+    // }
+    // rotationTo+= delta;
     // shipParams.rotationY -= delta;
     // console.log( shipParams.rotationY);
 
