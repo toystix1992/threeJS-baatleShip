@@ -3,24 +3,20 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 import { Water } from 'three/examples/jsm/objects/Water2';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { loadShips } from './ships/ships';
+import { onPointerMove } from './ships/moveShips';
 
-let scene, camera, clock, renderer, water;
-let rotationTo = 0;
-
-let ship
 const ships = ['ships/large.glb', 'ships/medium.gltf', 'ships/small.gltf'];
-
+let scene, camera, clock, renderer, water, raycaster, mouse;
+let ship
+let shipRotation = 0;
 const params = {
     color: '#9096df',
     scale: 4,
     flowX: 1,
     flowY: 1
 };
-//
-//     rotationFrom: -0.2,
-//     rotationTo: 0.2
-//
+
 init();
 animate();
 
@@ -37,23 +33,23 @@ function init() {
     camera.lookAt(scene.position);
 
     // clock
-
     clock = new THREE.Clock();
 
+    //mouse
+    mouse = new THREE.Vector2();
+
+    window.addEventListener('mousemove', (event) => {
+        mouse.x = event.clientX / window.innerWidth * 2 - 1
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1
+    });
+    //Raycaster
+    raycaster = new THREE.Raycaster();
+    let currentIntersect = null;
+    raycaster.setFromCamera(mouse, camera);
+
     // model
-        const loader = new GLTFLoader();
-        ships.forEach((link, idx) => {
-            loader.load(link, ( gltf ) => {
-                ship = gltf.scene;
-                scene.add(ship);
-                ship.position.set(idx*3, 0.6 ,0);
-                console.log(ship);
-                ship.rotation._y = rotationTo;
-                console.log(rotationTo);
-            }, undefined, ( error ) => {
-                console.error(error);
-            });
-        })
+    loadShips(ship, scene, shipRotation, ships);
+
     // ground
 
     const groundGeometry = new THREE.PlaneGeometry(20, 20);
@@ -148,49 +144,30 @@ function init() {
 
     gui.open();
 
-    //
+    //Orbit controls
 
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.minDistance = 5;
-    controls.maxDistance = 50;
-
+    controls.minDistance = 20;
+    controls.maxDistance = 30;
+    controls.maxPolarAngle = Math.PI / 3.7;
     //
 
     window.addEventListener('resize', onWindowResize);
-
 }
 
 function onWindowResize() {
-
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-
 }
 
 function animate() {
-
     requestAnimationFrame(animate);
-
+    const delta = clock.getDelta();
+    raycaster.setFromCamera(mouse, camera);
     render();
-
 }
 
 function render() {
-
-    const delta = clock.getDelta();
-    // console.log(rotationTo);
-    // rotationTo -= 0.01;
-    // if(rotationTo >= 0.2) {
-    //     rotationTo -= 0.01;
-    // } else if (rotationTo <= - 0.2) {
-    //     rotationTo += 0.01;
-    // }
-    // rotationTo+= delta;
-    // shipParams.rotationY -= delta;
-    // console.log( shipParams.rotationY);
-
     renderer.render(scene, camera);
-
 }
-
