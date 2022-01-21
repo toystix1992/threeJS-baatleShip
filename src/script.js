@@ -4,11 +4,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 import { Water } from 'three/examples/jsm/objects/Water2';
 import { loadShips } from './ships/ships';
+import {intersectFunc} from './raycaster/raycaster';
 import { onPointerMove } from './ships/moveShips';
 
 const ships = ['ships/large.glb', 'ships/medium.gltf', 'ships/small.gltf'];
-let scene, camera, clock, renderer, water, raycaster, mouse;
-let ship
+let scene, camera, clock, renderer, water, mouse,ship, intersects;
 let shipRotation = 0;
 const params = {
     color: '#9096df',
@@ -23,11 +23,9 @@ animate();
 function init() {
 
     // scene
-
     scene = new THREE.Scene();
 
     // camera
-
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
     camera.position.set(0, 5, 15);
     camera.lookAt(scene.position);
@@ -37,21 +35,16 @@ function init() {
 
     //mouse
     mouse = new THREE.Vector2();
-
     window.addEventListener('mousemove', (event) => {
         mouse.x = event.clientX / window.innerWidth * 2 - 1
         mouse.y = - (event.clientY / window.innerHeight) * 2 + 1
     });
-    //Raycaster
-    raycaster = new THREE.Raycaster();
-    let currentIntersect = null;
-    raycaster.setFromCamera(mouse, camera);
 
     // model
     loadShips(ship, scene, shipRotation, ships);
-
+    //raycaster
+    intersects = intersectFunc(THREE, camera, mouse, scene);
     // ground
-
     const groundGeometry = new THREE.PlaneGeometry(20, 20);
     const groundMaterial = new THREE.MeshStandardMaterial({ roughness: 0.8, metalness: 0.4 });
     const ground = new THREE.Mesh(groundGeometry, groundMaterial);
@@ -71,7 +64,6 @@ function init() {
     });
 
     // water
-
     const waterGeometry = new THREE.PlaneGeometry(20, 20);
 
     water = new Water(waterGeometry, {
@@ -87,7 +79,6 @@ function init() {
     scene.add(water);
 
     // skybox
-
     const cubeTextureLoader = new THREE.CubeTextureLoader();
     cubeTextureLoader.setPath('textures/cube/');
 
@@ -96,7 +87,6 @@ function init() {
         "dark-s_py.jpg", "dark-s_ny.jpg",
         "dark-s_pz.jpg", "dark-s_nz.jpg"
     ]);
-
     scene.background = cubeTexture;
 
     // light
@@ -116,32 +106,22 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     // gui
-
     const gui = new GUI();
 
     gui.addColor(params, 'color').onChange(function (value) {
-
         water.material.uniforms['color'].value.set(value);
-
     });
     gui.add(params, 'scale', 1, 10).onChange(function (value) {
-
         water.material.uniforms['config'].value.w = value;
-
     });
     gui.add(params, 'flowX', - 1, 1).step(0.01).onChange(function (value) {
-
         water.material.uniforms['flowDirection'].value.x = value;
         water.material.uniforms['flowDirection'].value.normalize();
-
     });
     gui.add(params, 'flowY', - 1, 1).step(0.01).onChange(function (value) {
-
         water.material.uniforms['flowDirection'].value.y = value;
         water.material.uniforms['flowDirection'].value.normalize();
-
     });
-
     gui.open();
 
     //Orbit controls
@@ -164,7 +144,7 @@ function onWindowResize() {
 function animate() {
     requestAnimationFrame(animate);
     const delta = clock.getDelta();
-    raycaster.setFromCamera(mouse, camera);
+    // intersects;
     render();
 }
 
