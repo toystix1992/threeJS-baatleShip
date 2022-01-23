@@ -1,22 +1,11 @@
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-const loader = new GLTFLoader();
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
+import { loadingManager } from "../helpers/loadingManager"
 
-const getGLTFModel = ( arrPath ) => {
-    const gltfArr = [];
-    arrPath.forEach(path=> {
-        loader.load(
-            path,
-            ( gltf ) => {
-                // scene.add( gltf.scene );
-                gltfArr.push(gltf.scene);
-                // gltf.scene;
-            },undefined,
-            ( error ) => {
-                console.log( 'An error happened', error );
-            }
-        );
-    })
-    return gltfArr;
+const loader = new GLTFLoader(loadingManager)
+
+const getGLTFModel = async (paths) => {
+    const gltfs = await Promise.all(paths.map((path) => loader.loadAsync(path)))
+    return gltfs
 }
 
-export default getGLTFModel;
+export default getGLTFModel

@@ -10,10 +10,11 @@ import resize from './helpers/resize';
 import { dt, et } from './helpers/time';
 import loadingScreen from './components/loadingScreen';
 import { mousePosition, mouse } from './helpers/mousePosition';
-console.log(getGLTFModel(['ships/large.glb', 'ships/medium.gltf', 'ships/small.gltf']));
+import { getPropertyFromStorage } from "./helpers/localStorage"
+
+
 let scene, camera, renderer, coursour, loadingManager;
 
-var loadingFlag = false;
 
 const init = () => {
     // scene
@@ -24,19 +25,9 @@ const init = () => {
     camera.position.set(0, 5, 15);
     camera.lookAt(scene.position);
     //Loading scrin
-    loadingScreen.box.position.set(0,0,5);
-	loadingScreen.camera.lookAt(loadingScreen.box.position);
-	loadingScreen.scene.add(loadingScreen.box);
-
-    //loading manager
-    loadingManager = new THREE.LoadingManager();
-	loadingManager.onProgress = (item, loaded, total) =>{
-		console.log(item, loaded, total);
-	};
-	loadingManager.onLoad = () => {
-		console.log("loaded all resources");
-		loadingFlag = true;
-	};
+    loadingScreen.box.position.set(0, 0, 5);
+    loadingScreen.camera.lookAt(loadingScreen.box.position);
+    loadingScreen.scene.add(loadingScreen.box);
 
     //Coursour geometry
     const geometry = new THREE.PlaneGeometry(1, 1);
@@ -54,6 +45,12 @@ const init = () => {
     scene.add(water);
     //model
 
+    getGLTFModel(['ships/large.glb', 'ships/medium.gltf', 'ships/small.gltf']).then((gltfs) => {
+        // debugger
+        gltfs.forEach((gltf) => {
+            water.add(gltf.scene)
+        })
+    })
 
     // if (ships.length > 0) {
     //     ships.forEach(ship => {
@@ -61,7 +58,6 @@ const init = () => {
     //     });
     // }
     // scene.add(ships[0])
-    // console.log(ships.length);
     // light
     const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
@@ -85,17 +81,21 @@ const init = () => {
 const onWindowResize = () => {
     resize(camera, renderer);
 };
+
 window.addEventListener('resize', onWindowResize);
 window.addEventListener('mousemove', mousePosition, false);
+
 const animate = () => {
-    // if( !loadingFlag ){
-	// 	requestAnimationFrame(animate);
-	// 	loadingScreen.box.position.x -= 0.05;
-	// 	if( loadingScreen.box.position.x < -5 ) loadingScreen.box.position.x = 5;
-	// 	loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
-	// 	renderer.render(loadingScreen.scene, loadingScreen.camera);
-	// 	return; // Stop the function here.
-	// }
+    const loading = getPropertyFromStorage("loading");
+
+    if (loading) {
+        requestAnimationFrame(animate);
+        loadingScreen.box.position.x -= 0.05;
+        if (loadingScreen.box.position.x < -5) loadingScreen.box.position.x = 5;
+        loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
+        renderer.render(loadingScreen.scene, loadingScreen.camera);
+        return;
+    }
     requestAnimationFrame(animate);
     render();
 }

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Water } from 'three/examples/jsm/objects/Water2';
+
 const params = {
     color: '#9096df',
     scale: 4,
