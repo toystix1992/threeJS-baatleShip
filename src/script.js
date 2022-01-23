@@ -1,22 +1,21 @@
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { loadShips, shipsArray } from './ships/ships';
+// import { loadShips, shipsArray } from './ships/ships';
 import water from './view/waterGeometry';
 import ground from './view/ground';
 import skybox from './view/skybox';
 import getGLTFModel from './loaders/gltfLoader';
 import resize from './helpers/resize';
-let scene, camera, clock, renderer,
-    raycaster, mouse, intersect,
-    coursour;
+import { dt, et } from './helpers/time';
+import loadingScreen from './components/loadingScreen';
+import { mousePosition, mouse } from './helpers/mousePosition';
+console.log(getGLTFModel(['ships/large.glb', 'ships/medium.gltf', 'ships/small.gltf']));
+let scene, camera, renderer, coursour, loadingManager;
 
-clock = new THREE.Clock();
+var loadingFlag = false;
 
-init();
-animate();
-
-function init() {
+const init = () => {
     // scene
     scene = new THREE.Scene();
     scene.background = skybox;
@@ -24,15 +23,27 @@ function init() {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 50);
     camera.position.set(0, 5, 15);
     camera.lookAt(scene.position);
+    //Loading scrin
+    loadingScreen.box.position.set(0,0,5);
+	loadingScreen.camera.lookAt(loadingScreen.box.position);
+	loadingScreen.scene.add(loadingScreen.box);
+
+    //loading manager
+    loadingManager = new THREE.LoadingManager();
+	loadingManager.onProgress = (item, loaded, total) =>{
+		console.log(item, loaded, total);
+	};
+	loadingManager.onLoad = () => {
+		console.log("loaded all resources");
+		loadingFlag = true;
+	};
 
     //Coursour geometry
     const geometry = new THREE.PlaneGeometry(1, 1);
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
     coursour = new THREE.Mesh(geometry, material);
     scene.add(coursour);
-    //raycaster
-    raycaster = new THREE.Raycaster();
-    mouse = new THREE.Vector2();
+
     // ground
     ground.rotation.x = Math.PI * - 0.5;
     scene.add(ground);
@@ -41,12 +52,16 @@ function init() {
     water.position.y = 1;
     water.rotation.x = Math.PI * - 0.5;
     scene.add(water);
+    //model
 
-    // model
-    getGLTFModel('ships/large.glb', water);
-    getGLTFModel('ships/medium.gltf', water);
-    getGLTFModel('ships/small.gltf', water);
 
+    // if (ships.length > 0) {
+    //     ships.forEach(ship => {
+    //         scene.add(ship);
+    //     });
+    // }
+    // scene.add(ships[0])
+    // console.log(ships.length);
     // light
     const ambientLight = new THREE.AmbientLight(0xcccccc, 0.4);
     scene.add(ambientLight);
@@ -57,7 +72,7 @@ function init() {
     // renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
     document.body.appendChild(renderer.domElement);
 
     //Orbit controls
@@ -65,46 +80,30 @@ function init() {
     controls.minDistance = 20;
     controls.maxDistance = 30;
     controls.maxPolarAngle = Math.PI / 3.7;
-}
+};
 
 const onWindowResize = () => {
-    resize(camera, renderer)
-}
+    resize(camera, renderer);
+};
 window.addEventListener('resize', onWindowResize);
-
-function pickPiece() {
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(shipsArray);
-    for (intersect of intersects) {
-        console.dir(intersect.object);
-        coursour.position.set(0, 0, 0);
-        coursour.position.copy(intersects[0].point);
-        // if (intersect.object.parrent === 'ship') {
-
-        // }
-    }
-}
-
-const getMousePos = (event) => {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    pickPiece();
-}
-
-window.addEventListener('mousemove', getMousePos, false);
-
-// function onWindowResize() {
-//     camera.aspect = window.innerWidth / window.innerHeight;
-//     camera.updateProjectionMatrix();
-//     renderer.setSize(window.innerWidth, window.innerHeight);
-// }
-
-function animate() {
+window.addEventListener('mousemove', mousePosition, false);
+const animate = () => {
+    // if( !loadingFlag ){
+	// 	requestAnimationFrame(animate);
+	// 	loadingScreen.box.position.x -= 0.05;
+	// 	if( loadingScreen.box.position.x < -5 ) loadingScreen.box.position.x = 5;
+	// 	loadingScreen.box.position.y = Math.sin(loadingScreen.box.position.x);
+	// 	renderer.render(loadingScreen.scene, loadingScreen.camera);
+	// 	return; // Stop the function here.
+	// }
     requestAnimationFrame(animate);
-    const delta = clock.getDelta();
     render();
 }
 
-function render() {
+const render = () => {
     renderer.render(scene, camera);
 }
+
+
+init();
+animate();
