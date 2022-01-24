@@ -14,3 +14,16 @@ body {
   left: 0;
   outline: none;
 }
+
+.loading {
+  position: absolute;
+  left: 40%;
+  top: 40%;
+  width: 20%;
+  z-index: 10;
+  color: aliceblue;
+  font-size: 44px;
+}
+.hidden {
+  display: none;
+}
