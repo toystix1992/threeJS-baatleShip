@@ -1,12 +1,15 @@
 import * as THREE from 'three';
+import camera from '../helpers/initial/camera';
+import water from '../view/waterGeometry';
 import { mouse } from './mousePosition';
 const raycaster = new THREE.Raycaster();
 
-const intersect = (camera, scene) => {
-    raycaster.setFromCamera(mouse, camera);
-    console.log(mouse);
-    // console.log(raycaster.intersectObjects(scene));
-    // return raycaster.intersectObjects(scene.children);
-}
+export let intersect = null;
 
-export default intersect;
+export const findIntersect = () => {
+    raycaster.setFromCamera(mouse, camera);
+    intersect = raycaster.intersectObjects(water.children);
+    console.log(intersect);
+    return raycaster.intersectObjects(water.children);
+};
+

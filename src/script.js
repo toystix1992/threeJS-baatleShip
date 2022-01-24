@@ -13,8 +13,8 @@ import { loadingScreen, animateLoadingScreen } from './components/loadingScreen'
 import { mousePosition } from './helpers/mousePosition';
 import getCursor from './view/getCursor';
 import ships from './view/ships';
+import {findIntersect} from './helpers/intersect';
 // import { dt, et } from './helpers/time';
-import intersect from './helpers/intersect';
 
 const loadingText = document.querySelector('.loading');
 let renderer;
@@ -26,12 +26,7 @@ const init = () => {
     camera.lookAt(scene.position);
     //Loading scrin
     loadingScreen();
-    //Coursour geometry
-    // const geometry = new THREE.PlaneGeometry(1, 1);
-    // const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
-    // coursour = new THREE.Mesh(geometry, material);
-    // scene.add(coursour);
-    cursor();
+    // cursor();
     // ground
     ground.rotation.x = Math.PI * - 0.5;
     scene.add(ground);
@@ -62,14 +57,8 @@ const init = () => {
     controls.maxPolarAngle = Math.PI / 3.7;
 };
 
-// const intersect = () => {
-//     raycaster.setFromCamera(mouse, camera);
-//     console.log(raycaster.intersectObjects(scene.children));
-//     // return raycaster.intersectObjects(scene.children);
-// };
-
 window.addEventListener('mousemove', mousePosition, false);
-// window.addEventListener('click', intersect);
+window.addEventListener('mousedown', findIntersect);
 //Resize
 const onWindowResize = () => {
     resize(camera, renderer);
@@ -77,7 +66,7 @@ const onWindowResize = () => {
 window.addEventListener('resize', onWindowResize);
 
 const animate = () => {
-    getCursor();
+    //getCursor();
     const loading = getPropertyFromStorage("loading");
     if (loading) {
         requestAnimationFrame(animate);

@@ -7,7 +7,9 @@ const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.Doub
 const cursor = new THREE.Mesh(geometry, material);
 
 const getCursor  = () => {
+    // cursor.position.set(mouse.x, mouse.y, 0);
     cursor.position.set(mouse.x, mouse.y, 0);
+    // console.log(cursor.position);
     ground.add(cursor);
 }
 

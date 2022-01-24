@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { perspectiveCamera } from '../canfig/config';
+import { perspectiveCamera } from '../config/config';
 
 const camera = new THREE.PerspectiveCamera(
     perspectiveCamera.fov,
