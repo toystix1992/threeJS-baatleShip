@@ -1,11 +1,11 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import camera from './initial/camera';
+import { canvas } from './initial/canvas';
 
-const controls = (camera, domElement) => {
-    const controls = new OrbitControls(camera, domElement);
-    controls.minDistance = 20;
-    controls.maxDistance = 30;
-    controls.maxPolarAngle = Math.PI / 3.7;
-    return controls;
-}
+const controls = new OrbitControls(camera, canvas);
+controls.minDistance = 20;
+controls.maxDistance = 30;
+controls.maxPolarAngle = Math.PI / 3.7;
+
 
 export default controls;

@@ -1,10 +1,10 @@
 import getGLTFModel from '../loaders/gltfLoader';
 import water from './waterGeometry';
+import { findIntersect } from '../helpers/intersect';
 import controls from '../helpers/controls';
-import camera from '../helpers/initial/camera';
-import renderer from '../helpers/initial/renderer';
 import { mouse } from '../helpers/mousePosition';
-import { getPropertyFromStorage } from '../helpers/localStorage';
+import { setPropertyToStorage, getPropertyFromStorage } from '../helpers/localStorage';
+
 export const ships = () => {
     const ships = [];
     getGLTFModel(['ships/large.gltf', 'ships/medium.gltf', 'ships/small.gltf', 'ships/small.gltf']).
@@ -34,14 +34,30 @@ export const ships = () => {
         });
     return ships;
 };
-export const moveShip = () => {
-    const intersect = getPropertyFromStorage('intersect');
-    const mousedown = getPropertyFromStorage('mousedown');
-    if (intersect.length > 0 && mousedown) {
-        controls(camera, renderer.domElement).enabled = false;
-        // console.log(controls(camera, renderer.domElement).enabled);
-        // controls().enabled = false;
-        // intersect.scene.position.x = mouse.x;
-        // intersect.scene.position.y = mouse.y;
+let choosenShip = null;
+export const chooseShip = () => {
+    const intersect = findIntersect();
+    if (intersect.length > 0) {
+        choosenShip = intersect[0].object.parent.parent;
+        console.log(choosenShip);
+    }
+};
+
+function logKey(e) {
+    if (choosenShip != null) {
+        console.log(e.code);
+        if (e.code === 'KeyD') {
+            choosenShip.position.x += 3;
+            console.log(choosenShip.position);
+        }
     }
 }
+
+document.addEventListener('click', chooseShip);
+document.addEventListener('keypress', logKey);
+
+
+// ArrowRight
+// ships.js:47 ArrowLeft
+// ships.js:47 ArrowUp
+// ships.js:47 ArrowDown

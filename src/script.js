@@ -5,13 +5,12 @@ import light from './helpers/initial/light';
 import renderer from './helpers/initial/renderer';
 import water from './view/waterGeometry';
 import ground from './view/ground';
-import skybox from './view/skybox';
 import resize from './helpers/resize';
 import controls from './helpers/controls';
-import { getPropertyFromStorage, removePropertyFromStorage } from "./helpers/localStorage";
+import { getPropertyFromStorage, removePropertyFromStorage, setPropertyToStorage } from "./helpers/localStorage";
 import { loadingScreen, animateLoadingScreen } from './components/loadingScreen';
 import { mousePosition } from './helpers/mousePosition';
-import { ships, moveShip } from './view/ships';
+import { ships, chooseShip} from './view/ships';
 import { findIntersect } from './helpers/intersect';
 // import { dt, et } from './helpers/time';
 // import cursor from './view/getCursor';
@@ -19,10 +18,6 @@ import { findIntersect } from './helpers/intersect';
 const loadingText = document.querySelector('.loading');
 
 const init = () => {
-    // scene
-    scene.background = skybox;
-    // camera
-    camera.lookAt(scene.position);
     //Loading scrin
     loadingScreen();
     // ground
@@ -33,8 +28,6 @@ const init = () => {
     ships();
     //Light
     light(scene);
-    //Orbit controls
-    controls(camera, renderer.domElement);
 };
 
 //Resize
@@ -47,10 +40,9 @@ const animate = () => {
     if (loading) {
         requestAnimationFrame(animate);
         animateLoadingScreen(renderer, loadingText);
-        return
+        return;
     }
     loadingText.classList.add('hidden');
-    moveShip();
     render();
     requestAnimationFrame(animate);
 };
@@ -61,9 +53,15 @@ const render = () => {
 
 init();
 animate();
+
+
 window.addEventListener('mousemove', mousePosition, false);
-window.addEventListener('mousedown', findIntersect);
+window.addEventListener('mousedown', () => {
+    setPropertyToStorage('mousedown', true);
+});
 window.addEventListener('mouseup', () => {
     removePropertyFromStorage('mousedown');
+    // controls.enabled = true;
 });
 window.addEventListener('resize', onWindowResize);
+

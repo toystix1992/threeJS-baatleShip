@@ -3,7 +3,7 @@ import { Water } from 'three/examples/jsm/objects/Water2';
 
 const params = {
     color: '#9096df',
-    scale: 4,
+    scale: 1,
     flowX: 1,
     flowY: 1
 };
@@ -16,7 +16,7 @@ const water = new Water(waterGeometry, {
     textureWidth: 1024,
     textureHeight: 1024
 });
-water.position.y = 1;
+water.position.y = 0.5;
 water.rotation.x = Math.PI * - 0.5;
 
 export default water;
