@@ -5,10 +5,12 @@ import { mouse } from './mousePosition';
 
 const raycaster = new Raycaster();
 let intersect = null;
+const ships = water.children;
+
 
 export const findIntersect = () => {
     raycaster.setFromCamera(mouse, camera);
-    intersect = raycaster.intersectObjects(water.children);
+    intersect = raycaster.intersectObjects(ships);
     return intersect;
 };
 
