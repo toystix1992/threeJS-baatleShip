@@ -6,7 +6,6 @@ export const mouse = {
 export const mousePosition = (e) => {
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
-//  console.log(mouse);
 };
 
 

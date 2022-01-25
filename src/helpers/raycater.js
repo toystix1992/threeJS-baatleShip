@@ -1,3 +1,3 @@
-import * as THREE from 'three';
-const raycaster = new THREE.Raycaster();
+import {Raycaster} from 'three';
+const raycaster = new Raycaster();
 export default raycaster;

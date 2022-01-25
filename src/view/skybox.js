@@ -1,6 +1,6 @@
-import * as THREE from 'three';
+import {CubeTextureLoader} from 'three';
 
-const cubeTextureLoader = new THREE.CubeTextureLoader();
+const cubeTextureLoader = new CubeTextureLoader();
 cubeTextureLoader.setPath('textures/cube/');
 
 const skybox = cubeTextureLoader.load([
