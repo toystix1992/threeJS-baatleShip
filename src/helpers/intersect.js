@@ -7,7 +7,6 @@ const raycaster = new Raycaster();
 let intersect = null;
 const ships = water.children;
 
-
 export const findIntersect = () => {
     raycaster.setFromCamera(mouse, camera);
     intersect = raycaster.intersectObjects(ships);

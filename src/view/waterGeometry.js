@@ -8,7 +8,7 @@ const params = {
     flowY: 1
 };
 
-const waterGeometry = new PlaneGeometry(20, 20);
+const waterGeometry = new PlaneGeometry(18, 18);
 const water = new Water(waterGeometry, {
     color: params.color,
     scale: params.scale,

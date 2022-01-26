@@ -1,7 +1,7 @@
 import {PlaneGeometry, MeshStandardMaterial, Mesh, TextureLoader} from "three";
 import { loadingManager } from "../helpers/loadingManager";
 
-const groundGeometry = new PlaneGeometry(20, 20)
+const groundGeometry = new PlaneGeometry(18, 18)
 const groundMaterial = new MeshStandardMaterial({
   roughness: 0.8,
   metalness: 0.4,
@@ -18,5 +18,5 @@ textureLoader.load("textures/fieldTexture.jpg", (map) => {
   groundMaterial.needsUpdate = true;
 });
 ground.rotation.x = Math.PI * - 0.5;
-
+console.log(ground);
 export default ground;

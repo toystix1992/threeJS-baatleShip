@@ -1,9 +1,12 @@
 import getGLTFModel from '../loaders/gltfLoader';
 import water from './waterGeometry';
 import { findIntersect } from '../helpers/intersect';
-import controls from '../helpers/controls';
-import { mouse } from '../helpers/mousePosition';
 import { setPropertyToStorage, getPropertyFromStorage } from '../helpers/localStorage';
+import {getShipSize} from './checker/checker';
+
+const setedShips = [];
+let choosenShip = null;
+let isTurned = false;
 
 export const ships = () => {
     let ships = null;
@@ -38,44 +41,75 @@ export const ships = () => {
     return ships;
 };
 
-let choosenShip = null;
 export const chooseShip = () => {
     const intersect = findIntersect();
     if (intersect.length > 0) {
         choosenShip = intersect[0].object.parent.parent;
-        if(choosenShip.name === 'mediumShip') {
-            choosenShip.position.x = 0;
-            choosenShip.position.y = 2;
-        } else if (
-            choosenShip.name === 'smallShipOne' ||
-            choosenShip.name === 'smallShipTwo' ||
-            choosenShip.name === 'largeShip'
-        ) {
-                choosenShip.position.x = 2;
-                choosenShip.position.y = 2;
+        if(!setedShips.includes( choosenShip.name)) {
+            if (choosenShip.name === 'mediumShip') {
+                choosenShip.position.x = 0;
+                choosenShip.position.y = 1.5;
+            } else if (
+                choosenShip.name === 'smallShipOne' ||
+                choosenShip.name === 'smallShipTwo' ||
+                choosenShip.name === 'largeShip'
+            ) {
+                choosenShip.position.x = 1.5;
+                choosenShip.position.y = 1.5;
+            }
         }
     }
 };
 
-function logKey(e) {
-    if (choosenShip != null) {
+function moveShip(e) {
+    if (
+        choosenShip != null &&
+        !setedShips.includes( choosenShip.name)
+    ) {
         if (e.code === 'KeyD') {
-            choosenShip.position.x += 3.2;
+            choosenShip.position.x += 3;
         } else if (e.code === 'KeyA') {
-            choosenShip.position.x -= 3.2;
+            choosenShip.position.x -= 3;
         } else if (e.code === 'KeyW') {
-            choosenShip.position.y += 3.2;
+            choosenShip.position.y += 3;
         } else if (e.code === 'KeyS') {
-            choosenShip.position.y -= 3.2;
+            choosenShip.position.y -= 3;
+        } else if (e.code === 'KeyE') {
+            if (choosenShip.name === 'mediumShip') {
+                if (!isTurned) {
+                    choosenShip.rotation.y += Math.PI / 2;
+                    choosenShip.position.x -= 1.6;
+                    choosenShip.position.y += 1.6;
+                    isTurned = true;
+                } else {
+                    choosenShip.rotation.y -= Math.PI / 2;
+                    choosenShip.position.x += 1.6;
+                    choosenShip.position.y -= 1.6;
+                    isTurned = false;
+                }
+            } else {
+                if (!isTurned) {
+                    choosenShip.rotation.y += Math.PI / 2;
+                    isTurned = true;
+                } else {
+                    choosenShip.rotation.y -= Math.PI / 2;
+                    isTurned = false;
+                }
+            }
+        } else if (e.code === 'KeyQ') {
+            const shipPosConf = {
+                pos: choosenShip.position,
+                turn: isTurned
+            };
+            setPropertyToStorage(`${choosenShip.name}`, shipPosConf);
+            setedShips.push(choosenShip.name);
+            choosenShip = null;
+            getShipSize();
         }
+        setedShips.length === 4?  document.removeEventListener('click', chooseShip): console.log();
     }
 }
 
 document.addEventListener('click', chooseShip);
-document.addEventListener('keypress', logKey);
+document.addEventListener('keypress', moveShip);
 
-
-// ArrowRight
-// ships.js:47 ArrowLeft
-// ships.js:47 ArrowUp
-// ships.js:47 ArrowDown
