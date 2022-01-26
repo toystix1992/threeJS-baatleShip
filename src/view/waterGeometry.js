@@ -8,7 +8,7 @@ const params = {
     flowY: 1
 };
 
-const waterGeometry = new PlaneGeometry(18, 18);
+const waterGeometry = new PlaneGeometry(6, 6);
 const water = new Water(waterGeometry, {
     color: params.color,
     scale: params.scale,
@@ -18,5 +18,4 @@ const water = new Water(waterGeometry, {
 });
 water.position.y = 0.5;
 water.rotation.x = Math.PI * - 0.5;
-
 export default water;
