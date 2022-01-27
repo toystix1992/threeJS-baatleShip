@@ -18,4 +18,5 @@ const water = new Water(waterGeometry, {
 });
 water.position.y = 0.5;
 water.rotation.x = Math.PI * - 0.5;
+console.log(water);
 export default water;

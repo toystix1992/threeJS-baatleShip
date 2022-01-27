@@ -44,6 +44,7 @@ export const ships = () => {
 export const chooseShip = () => {
     const intersect = findIntersect();
     if (intersect.length > 0) {
+        isTurned = false;
         choosenShip = intersect[0].object.parent.parent;
         if(!setedShips.includes( choosenShip.name)) {
             if (choosenShip.name === 'mediumShip') {

@@ -1,3 +1,6 @@
+// const pages =
+
+
 export const perspectiveCamera = {
     fov: 45,
     near: 0.1,

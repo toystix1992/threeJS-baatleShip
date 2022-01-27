@@ -23,14 +23,17 @@ export const getShipZone = () => {
             largeShipHor.position.x = largeShip.pos.x;
             largeShipHor.position.y = largeShip.pos.y;
             largeShipHor.position.z = 0.01;
+            largeShipHor.renderOrder = 1;
             water.add(largeShipHor);
-            setPropertyToStorage('LargeShipZone', largeShipHor);
+            console.log(largeShipHor.position, largeShipHor.geometry.parameters, largeShipHor.matrix.elements);
+            setPropertyToStorage('LargeShipZone', largeShipHor.matrix.elements);
         } else {
             largeShipVert.position.x = largeShip.pos.x;
             largeShipVert.position.y = largeShip.pos.y;
             largeShipVert.position.z = 0.01;
             water.add(largeShipVert);
-            setPropertyToStorage('LargeShipZone', largeShipHor);
+            console.log(largeShipVert.position, largeShipVert.geometry.parameters);
+            setPropertyToStorage('LargeShipZone', largeShipVert.matrix.elements);
         }
         removePropertyFromStorage('largeShip');
     } else if (mediumShip) {
@@ -39,13 +42,13 @@ export const getShipZone = () => {
             mediumShipHor.position.y = mediumShip.pos.y;
             mediumShipHor.position.z = 0.01;
             water.add(mediumShipHor);
-            setPropertyToStorage('MediumShipZone', mediumShipHor);
+            setPropertyToStorage('MediumShipZone', mediumShipHor.matrix.elements);
         } else {
             mediumShipVert.position.x = mediumShip.pos.x;
             mediumShipVert.position.y = mediumShip.pos.y;
             mediumShipVert.position.z = 0.01;
             water.add(mediumShipVert);
-            setPropertyToStorage('MediumShipZone', mediumShipHor);
+            setPropertyToStorage('MediumShipZone', mediumShipVert.matrix.elements);
         }
         removePropertyFromStorage('mediumShip');
     } else if (smallShipOne) {
@@ -54,13 +57,13 @@ export const getShipZone = () => {
         smallShipFirst.position.z = 0.01;
         water.add(smallShipFirst);
         removePropertyFromStorage('smallShipOne');
-        setPropertyToStorage('SmallShipOneZone', smallShipFirst);
+        setPropertyToStorage('SmallShipOneZone', smallShipFirst.matrix.elements);
     } else if (smallShipTwo) {
         smallShipSec.position.x = smallShipTwo.pos.x;
         smallShipSec.position.y = smallShipTwo.pos.y;
         smallShipSec.position.z = 0.01;
         water.add(smallShipSec);
         removePropertyFromStorage('smallShipTwo');
-        setPropertyToStorage('SmallShipTwoZone', smallShipSec);
+        setPropertyToStorage('SmallShipTwoZone', smallShipSec.matrix.elements);
     }
 }

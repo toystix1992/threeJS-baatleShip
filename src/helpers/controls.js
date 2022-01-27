@@ -7,6 +7,3 @@ controls.minDistance = 8;
 controls.maxDistance = 11;
 controls.maxPolarAngle = Math.PI / 3.7;
 controls.maxAzimuthAngle = Math.PI / 2;
-
-
-export default controls;
