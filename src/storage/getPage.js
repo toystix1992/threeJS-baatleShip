@@ -1,7 +1,7 @@
 import scene from '../helpers/initial/scene';
 import settingPage from '../components/settingPage';
 import homePage from '../components/homePage';
-let page = 'home';
+let page = 'setting';
 
 const getPage = () => {
     if (page === 'setting') {

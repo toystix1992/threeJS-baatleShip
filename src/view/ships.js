@@ -1,8 +1,7 @@
 import getGLTFModel from '../loaders/gltfLoader';
 import water from './waterGeometry';
 import { findIntersect } from '../helpers/intersect';
-import { setPropertyToStorage, getPropertyFromStorage } from '../helpers/localStorage';
-import {getShipZone} from './checker/checker';
+import {lightShipZone} from './checker/checker';
 
 const setedShips = [];
 let choosenShip = null;
@@ -100,13 +99,13 @@ function moveShip(e) {
             }
         } else if (e.code === 'KeyQ') {
             const shipPosConf = {
+                name: choosenShip.name,
                 pos: choosenShip.position,
                 turn: isTurned
             };
-            setPropertyToStorage(`${choosenShip.name}`, shipPosConf);
             setedShips.push(choosenShip.name);
             choosenShip = null;
-            getShipZone();
+            lightShipZone(shipPosConf);
         }
         setedShips.length === 4?  document.removeEventListener('click', chooseShip): console.log();
     }

@@ -12,6 +12,5 @@ const material = new MeshBasicMaterial({
     side: DoubleSide,
     map: texture,
 });
-console.log(texture);
 const wavesFlag = new Mesh(geometry, material);
 export default wavesFlag;
