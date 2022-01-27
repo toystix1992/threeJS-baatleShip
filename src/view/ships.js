@@ -95,6 +95,7 @@ function moveShip(e) {
                     choosenShip.rotation.y -= Math.PI / 2;
                     isTurned = false;
                 }
+                console.log(isTurned);
             }
         } else if (e.code === 'KeyQ') {
             const shipPosConf = {
