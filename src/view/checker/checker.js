@@ -15,7 +15,6 @@ const smallShipFirst = plane(1, 1, config);
 const smallShipSec = plane(1, 1, config);
 
 export const lightShipZone = (shipPosConf) => {
-    console.log(shipPosConf);
     if (shipPosConf.name === 'largeShip') {
         if (!shipPosConf.turn) {
             largeShipHor.position.x = shipPosConf.pos.x;
@@ -23,6 +22,7 @@ export const lightShipZone = (shipPosConf) => {
             largeShipHor.position.z = 0.01;
             largeShipHor.renderOrder = 1;
             water.add(largeShipHor);
+            console.log(largeShipHor);
         } else {
             largeShipVert.position.x = shipPosConf.pos.x;
             largeShipVert.position.y = shipPosConf.pos.y;
@@ -190,4 +190,10 @@ export const checkRotateEnable = (choosenShip, isTurned) => {
             return true;
         }
     }
+}
+
+export const checkShipsIntersections = () => {
+    setedShips.forEach(ship => {
+            console.log(ship.name);
+        });
 }

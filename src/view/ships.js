@@ -110,7 +110,8 @@ function moveShip(e) {
                 pos: choosenShip.position,
                 turn: isTurned
             };
-            setedShips.push(choosenShip.name);
+            setedShips.push(shipPosConf);
+            // console.log(setedShips);
             choosenShip = null;
             lightShipZone(shipPosConf);
         }
