@@ -1,7 +1,7 @@
 import getGLTFModel from '../loaders/gltfLoader';
 import water from './waterGeometry';
 import { findIntersect } from '../helpers/intersect';
-import {lightShipZone} from './checker/checker';
+import {lightShipZone, checkFieldBorders} from './checker/checker';
 
 const setedShips = [];
 let choosenShip = null;
@@ -66,8 +66,11 @@ function moveShip(e) {
         choosenShip != null &&
         !setedShips.includes( choosenShip.name)
     ) {
+        console.log(choosenShip.position);
         if (e.code === 'KeyD') {
+            checkFieldBorders(choosenShip, 'KeyD');
             choosenShip.position.x += 1;
+            console.log(choosenShip.position);
         } else if (e.code === 'KeyA') {
             choosenShip.position.x -= 1;
         } else if (e.code === 'KeyW') {
