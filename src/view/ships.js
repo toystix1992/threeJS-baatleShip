@@ -1,7 +1,7 @@
 import getGLTFModel from '../loaders/gltfLoader';
 import water from './waterGeometry';
 import { findIntersect } from '../helpers/intersect';
-import {lightShipZone, checkFieldBorders, checkRotateEnable} from './checker/checker';
+import { lightShipZone, checkFieldBorders, checkRotateEnable} from './checker/checker';
 
 const setedShips = [];
 let choosenShip = null;
@@ -45,7 +45,7 @@ export const chooseShip = () => {
     if (intersect.length > 0) {
         isTurned = false;
         choosenShip = intersect[0].object.parent.parent;
-        if(!setedShips.includes( choosenShip.name)) {
+        if (!setedShips.includes(choosenShip.name)) {
             if (choosenShip.name === 'mediumShip') {
                 choosenShip.position.x = 0;
                 choosenShip.position.y = 0.5;
@@ -61,23 +61,23 @@ export const chooseShip = () => {
     }
 };
 
-function moveShip(e) {
+const moveShip = (e) => {
     if (
         choosenShip != null &&
-        !setedShips.includes( choosenShip.name)
+        !setedShips.includes(choosenShip.name)
     ) {
         if (e.code === 'KeyD') {
-            checkFieldBorders(choosenShip, 'KeyD', isTurned)?
-            choosenShip.position.x += 1:choosenShip;
+            checkFieldBorders(choosenShip, 'KeyD', isTurned) ?
+                choosenShip.position.x += 1 : choosenShip;
         } else if (e.code === 'KeyA') {
-            checkFieldBorders(choosenShip, 'KeyA', isTurned)?
-            choosenShip.position.x -= 1:choosenShip;
+            checkFieldBorders(choosenShip, 'KeyA', isTurned) ?
+                choosenShip.position.x -= 1 : choosenShip;
         } else if (e.code === 'KeyW') {
-            checkFieldBorders(choosenShip, 'KeyW', isTurned)?
-            choosenShip.position.y += 1:choosenShip;
+            checkFieldBorders(choosenShip, 'KeyW', isTurned) ?
+                choosenShip.position.y += 1 : choosenShip;
         } else if (e.code === 'KeyS') {
-            checkFieldBorders(choosenShip, 'KeyS', isTurned)?
-            choosenShip.position.y -= 1:choosenShip;
+            checkFieldBorders(choosenShip, 'KeyS', isTurned) ?
+                choosenShip.position.y -= 1 : choosenShip;
         } else if (e.code === 'KeyE') {
             if (choosenShip.name === 'mediumShip') {
                 if (checkRotateEnable(choosenShip, isTurned)) {
@@ -110,12 +110,12 @@ function moveShip(e) {
                 pos: choosenShip.position,
                 turn: isTurned
             };
-            setedShips.push(shipPosConf);
-            // console.log(setedShips);
             choosenShip = null;
+            setedShips.push(shipPosConf);
             lightShipZone(shipPosConf);
+
         }
-        setedShips.length === 4?  document.removeEventListener('click', chooseShip): console.log();
+        setedShips.length === 4 ? document.removeEventListener('click', chooseShip) : console.log();
     }
 }
 

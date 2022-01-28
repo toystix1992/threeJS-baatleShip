@@ -1,58 +1,151 @@
 import { Color } from 'three';
 import water from '../waterGeometry';
 import { plane } from '../../helpers/mesh/plane';
-
+const shipsZone = [];
+let shipZone;
 const config = {
     color: new Color('green'),
     opacity: 0.1,
     transparent: true
-}
-const largeShipHor = plane(3, 1, config);
-const largeShipVert = plane(1, 3, config);
-const mediumShipHor = plane(2, 1, config);
-const mediumShipVert = plane(1, 2, config);
-const smallShipFirst = plane(1, 1, config);
-const smallShipSec = plane(1, 1, config);
-
+};
 export const lightShipZone = (shipPosConf) => {
     if (shipPosConf.name === 'largeShip') {
         if (!shipPosConf.turn) {
-            largeShipHor.position.x = shipPosConf.pos.x;
-            largeShipHor.position.y = shipPosConf.pos.y;
-            largeShipHor.position.z = 0.01;
-            largeShipHor.renderOrder = 1;
-            water.add(largeShipHor);
-            console.log(largeShipHor);
+            const startShip = plane(1, 1, config);
+            startShip.name = 'largeShip';
+            startShip.position.set(
+                shipPosConf.pos.x - 1,
+                shipPosConf.pos.y,
+                0.01
+            );
+            const centerShip = plane(1, 1, config);
+            centerShip.name = 'largeShip';
+            centerShip.position.set(
+                shipPosConf.pos.x,
+                shipPosConf.pos.y,
+                0.01
+            );
+            const endShip = plane(1, 1, config);
+            endShip.name = 'largeShip';
+            endShip.position.set(
+                shipPosConf.pos.x + 1,
+                shipPosConf.pos.y,
+                0.01
+            );
+
+            shipsZone.push([
+                shipPosConf.name, [
+                    startShip.position,
+                    centerShip.position,
+                    endShip.position
+                ]
+            ]);
+            water.add(startShip, centerShip, endShip);
         } else {
-            largeShipVert.position.x = shipPosConf.pos.x;
-            largeShipVert.position.y = shipPosConf.pos.y;
-            largeShipVert.position.z = 0.01;
-            water.add(largeShipVert);
-            console.log(largeShipVert.position, largeShipVert.geometry.parameters);
+            const startShip = plane(1, 1, config);
+            startShip.name = 'largeShip';
+            startShip.position.set(
+                shipPosConf.pos.x,
+                shipPosConf.pos.y - 1,
+                0.01
+            );
+            const centerShip = plane(1, 1, config);
+            centerShip.name = 'largeShip';
+            centerShip.position.set(
+                shipPosConf.pos.x,
+                shipPosConf.pos.y,
+                0.01
+            );
+            const endShip = plane(1, 1, config);
+            endShip.name = 'largeShip';
+            endShip.position.set(
+                shipPosConf.pos.x,
+                shipPosConf.pos.y + 1,
+                0.01
+            );
+            shipsZone.push([
+                shipPosConf.name, [
+                    startShip.position,
+                    centerShip.position,
+                    endShip.position
+                ]
+            ]);
+            water.add(startShip, centerShip, endShip);
         }
-    }
-    else if (shipPosConf.name === 'mediumShip') {
+    } else if (shipPosConf.name === 'mediumShip') {
         if (!shipPosConf.turn) {
-            mediumShipHor.position.x = shipPosConf.pos.x;
-            mediumShipHor.position.y = shipPosConf.pos.y;
-            mediumShipHor.position.z = 0.01;
-            water.add(mediumShipHor);
+            const startShip = plane(1, 1, config);
+            startShip.name = 'mediumShip';
+            startShip.position.set(
+                shipPosConf.pos.x - 0.5,
+                shipPosConf.pos.y,
+                0.01
+            );
+            const endShip = plane(1, 1, config);
+            endShip.name = 'mediumShip';
+            endShip.position.set(
+                shipPosConf.pos.x + 0.5,
+                shipPosConf.pos.y,
+                0.01
+            );
+            shipsZone.push([
+                shipPosConf.name, [
+                    startShip.position,
+                    endShip.position
+                ]
+            ]);
+            water.add(startShip, endShip);
         } else {
-            mediumShipVert.position.x = shipPosConf.pos.x;
-            mediumShipVert.position.y = shipPosConf.pos.y;
-            mediumShipVert.position.z = 0.01;
-            water.add(mediumShipVert);
+            const startShip = plane(1, 1, config);
+            startShip.name = 'mediumShip';
+            startShip.position.set(
+                shipPosConf.pos.x,
+                shipPosConf.pos.y - 0.5,
+                0.01
+            );
+            const endShip = plane(1, 1, config);
+            endShip.name = 'mediumShip';
+            endShip.position.set(
+                shipPosConf.pos.x,
+                shipPosConf.pos.y + 0.5,
+                0.01
+            );
+            shipsZone.push([
+                shipPosConf.name, [
+                    startShip.position,
+                    endShip.position
+                ]
+            ]);
+            water.add(startShip, endShip);
         }
     } else if (shipPosConf.name === 'smallShipOne') {
-        smallShipFirst.position.x = shipPosConf.pos.x;
-        smallShipFirst.position.y = shipPosConf.pos.y;
-        smallShipFirst.position.z = 0.01;
-        water.add(smallShipFirst);
+        const centerShip = plane(1, 1, config);
+        centerShip.name = 'smallShipOne';
+        centerShip.position.set(
+            shipPosConf.pos.x,
+            shipPosConf.pos.y,
+            0.01
+        );
+        shipsZone.push([
+            shipPosConf.name, [
+                centerShip.position
+            ]
+        ]);
+        water.add(centerShip);
     } else if (shipPosConf.name === 'smallShipTwo') {
-        smallShipSec.position.x = shipPosConf.pos.x;
-        smallShipSec.position.y = shipPosConf.pos.y;
-        smallShipSec.position.z = 0.01;
-        water.add(smallShipSec);
+        const centerShip = plane(1, 1, config);
+        centerShip.name = 'smallShipTwo';
+        centerShip.position.set(
+            shipPosConf.pos.x,
+            shipPosConf.pos.y,
+            0.01
+        );
+        shipsZone.push([
+            shipPosConf.name, [
+                centerShip.position
+            ]
+        ]);
+        water.add(centerShip);
     }
 };
 
@@ -192,8 +285,34 @@ export const checkRotateEnable = (choosenShip, isTurned) => {
     }
 }
 
-export const checkShipsIntersections = () => {
-    setedShips.forEach(ship => {
-            console.log(ship.name);
-        });
+const checkShipsIntersections = (shipPosConf) => {
+    // shipsZone.forEach(ship => {
+    //     console.log(ship);
+    // })
+    console.log(shipsZone);
 }
+
+
+
+// if (shipsZone.length === 0) {
+//     if (shipPosConf.name === 'largeShip' &&
+//         shipPosConf.turn === false) {
+//         firstChosebShip =
+//         `${shipPosConf.pos.x - 1}${shipPosConf.pos.y}
+//         ${shipPosConf.pos.x}${shipPosConf.pos.y}
+//         ${shipPosConf.pos.x + 1}${shipPosConf.pos.y}
+//         `;
+//     } else if (shipPosConf.name === 'largeShip' &&
+//     shipPosConf.turn === true) {
+//     firstChosebShip =
+//         `${shipPosConf.pos.x}${shipPosConf.pos.y - 1}
+//         ${shipPosConf.pos.x}${shipPosConf.pos.y}
+//         ${shipPosConf.pos.x}${shipPosConf.pos.y + 1}
+//     `;
+// }
+//     console.log(firstChosebShip);
+// } else {
+//     shipsZone.forEach(ship => {
+//         console.log(ship[1].x, ship[1].y);
+//     })
+// }
