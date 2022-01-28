@@ -2,7 +2,7 @@ import { Color } from 'three';
 import water from '../waterGeometry';
 import { plane } from '../../helpers/mesh/plane';
 const shipsZone = [];
-let shipZone;
+let shipZone, rendererPlanes;
 const config = {
     color: new Color('green'),
     opacity: 0.1,
@@ -33,14 +33,14 @@ export const lightShipZone = (shipPosConf) => {
                 0.01
             );
 
-            shipsZone.push([
+            shipZone = [
                 shipPosConf.name, [
                     startShip.position,
                     centerShip.position,
                     endShip.position
                 ]
-            ]);
-            water.add(startShip, centerShip, endShip);
+            ];
+            rendererPlanes = [startShip, centerShip, endShip];
         } else {
             const startShip = plane(1, 1, config);
             startShip.name = 'largeShip';
@@ -63,14 +63,14 @@ export const lightShipZone = (shipPosConf) => {
                 shipPosConf.pos.y + 1,
                 0.01
             );
-            shipsZone.push([
+            shipZone = [
                 shipPosConf.name, [
                     startShip.position,
                     centerShip.position,
                     endShip.position
                 ]
-            ]);
-            water.add(startShip, centerShip, endShip);
+            ];
+            rendererPlanes = [startShip, centerShip, endShip];
         }
     } else if (shipPosConf.name === 'mediumShip') {
         if (!shipPosConf.turn) {
@@ -88,13 +88,13 @@ export const lightShipZone = (shipPosConf) => {
                 shipPosConf.pos.y,
                 0.01
             );
-            shipsZone.push([
+            shipZone = [
                 shipPosConf.name, [
                     startShip.position,
                     endShip.position
                 ]
-            ]);
-            water.add(startShip, endShip);
+            ];
+            rendererPlanes = [startShip, endShip];
         } else {
             const startShip = plane(1, 1, config);
             startShip.name = 'mediumShip';
@@ -110,13 +110,13 @@ export const lightShipZone = (shipPosConf) => {
                 shipPosConf.pos.y + 0.5,
                 0.01
             );
-            shipsZone.push([
+            shipZone = [
                 shipPosConf.name, [
                     startShip.position,
                     endShip.position
                 ]
-            ]);
-            water.add(startShip, endShip);
+            ];
+            rendererPlanes = [startShip, endShip];
         }
     } else if (shipPosConf.name === 'smallShipOne') {
         const centerShip = plane(1, 1, config);
@@ -126,12 +126,12 @@ export const lightShipZone = (shipPosConf) => {
             shipPosConf.pos.y,
             0.01
         );
-        shipsZone.push([
+        shipZone = [
             shipPosConf.name, [
                 centerShip.position
             ]
-        ]);
-        water.add(centerShip);
+        ];
+        rendererPlanes = [centerShip];
     } else if (shipPosConf.name === 'smallShipTwo') {
         const centerShip = plane(1, 1, config);
         centerShip.name = 'smallShipTwo';
@@ -140,13 +140,18 @@ export const lightShipZone = (shipPosConf) => {
             shipPosConf.pos.y,
             0.01
         );
-        shipsZone.push([
+        shipZone = [
             shipPosConf.name, [
                 centerShip.position
             ]
-        ]);
-        water.add(centerShip);
+        ];
+        rendererPlanes = [centerShip];
     }
+    checkShipsIntersections(shipsZone, shipZone)
+    shipsZone.push(shipZone);
+    rendererPlanes.forEach(rendererPlane => {
+        water.add(rendererPlane);
+    });
 };
 
 export const checkFieldBorders = (choosenShip, keyCode, isTurned) => {
@@ -283,36 +288,13 @@ export const checkRotateEnable = (choosenShip, isTurned) => {
             return true;
         }
     }
-}
+};
 
-const checkShipsIntersections = (shipPosConf) => {
+const checkShipsIntersections = (shipsZone, shipZone) => {
+    console.log(shipZone[1]);
+    const typeShip = shipZone[0];
+    console.log(typeShip);
     // shipsZone.forEach(ship => {
-    //     console.log(ship);
-    // })
-    console.log(shipsZone);
-}
-
-
-
-// if (shipsZone.length === 0) {
-//     if (shipPosConf.name === 'largeShip' &&
-//         shipPosConf.turn === false) {
-//         firstChosebShip =
-//         `${shipPosConf.pos.x - 1}${shipPosConf.pos.y}
-//         ${shipPosConf.pos.x}${shipPosConf.pos.y}
-//         ${shipPosConf.pos.x + 1}${shipPosConf.pos.y}
-//         `;
-//     } else if (shipPosConf.name === 'largeShip' &&
-//     shipPosConf.turn === true) {
-//     firstChosebShip =
-//         `${shipPosConf.pos.x}${shipPosConf.pos.y - 1}
-//         ${shipPosConf.pos.x}${shipPosConf.pos.y}
-//         ${shipPosConf.pos.x}${shipPosConf.pos.y + 1}
-//     `;
-// }
-//     console.log(firstChosebShip);
-// } else {
-//     shipsZone.forEach(ship => {
-//         console.log(ship[1].x, ship[1].y);
-//     })
-// }
+    //     console.log(ship[1]);
+    // });
+};
