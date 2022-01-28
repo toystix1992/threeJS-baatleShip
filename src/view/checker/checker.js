@@ -15,10 +15,9 @@ const smallShipFirst = plane(1, 1, config);
 const smallShipSec = plane(1, 1, config);
 
 export const lightShipZone = (shipPosConf) => {
-    console.log(shipPosConf.pos);
+    console.log(shipPosConf);
     if (shipPosConf.name === 'largeShip') {
         if (!shipPosConf.turn) {
-            console.log(shipPosConf);
             largeShipHor.position.x = shipPosConf.pos.x;
             largeShipHor.position.y = shipPosConf.pos.y;
             largeShipHor.position.z = 0.01;
@@ -57,17 +56,138 @@ export const lightShipZone = (shipPosConf) => {
     }
 };
 
-export const checkFieldBorders = (choosenShip, keyCode) => {
-    if (choosenShip.name === 'smallShipOne' ||
-    choosenShip.name === 'smallShipTwo') {
-        if (choosenShip.position.x > 1.5 ||
-            choosenShip.position.x < -1.5 ||
-            choosenShip.position.y > 1.5 ||
-            choosenShip.position.y < -1.5
-        ) {
+export const checkFieldBorders = (choosenShip, keyCode, isTurned) => {
+    if (keyCode === 'KeyD') {
+        if (choosenShip.name === 'smallShipOne' ||
+            choosenShip.name === 'smallShipTwo') {
+            if (choosenShip.position.x > 1.5) {
+                return false;
+            } else {
+                return true;
+            }
+        } else if (
+            choosenShip.name === 'largeShip' ||
+            choosenShip.name === 'mediumShip') {
+            if (!isTurned) {
+                if (choosenShip.position.x > 1) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else if (isTurned) {
+                if (choosenShip.position.x > 1.5) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+    if (keyCode === 'KeyA') {
+        if (choosenShip.name === 'smallShipOne' ||
+            choosenShip.name === 'smallShipTwo') {
+            if (choosenShip.position.x < -1.5) {
+                return false;
+            } else {
+                return true;
+            }
+        } else if (
+            choosenShip.name === 'largeShip' ||
+            choosenShip.name === 'mediumShip') {
+            if (!isTurned) {
+                if (choosenShip.position.x < -1) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else if (isTurned) {
+                if (choosenShip.position.x < -1.5) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+    if (keyCode === 'KeyW') {
+        if (choosenShip.name === 'smallShipOne' ||
+            choosenShip.name === 'smallShipTwo') {
+            if (choosenShip.position.y > 1.5) {
+                return false;
+            } else {
+                return true;
+            }
+        } if (
+            choosenShip.name === 'largeShip' ||
+            choosenShip.name === 'mediumShip') {
+            if (isTurned) {
+                if (choosenShip.position.y > 1) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else if (!isTurned) {
+                if (choosenShip.position.y > 1.5) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+    if (keyCode === 'KeyS') {
+        if (choosenShip.name === 'smallShipOne' ||
+            choosenShip.name === 'smallShipTwo') {
+            if (choosenShip.position.y < -1.5) {
+                return false;
+            } else {
+                return true;
+            }
+        } else if (
+            choosenShip.name === 'largeShip' ||
+            choosenShip.name === 'mediumShip') {
+            if (isTurned) {
+                if (choosenShip.position.y < -1) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else if (!isTurned) {
+                if (choosenShip.position.y < -1.5) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+};
+
+export const checkRotateEnable = (choosenShip, isTurned) => {
+    if (choosenShip.name === 'smallShipTwo' ||
+        choosenShip.name === 'smallShipTwo') {
+        return true;
+    } else if (choosenShip.name === 'largeShip') {
+        if (choosenShip.position.x === 2.5 ||
+            choosenShip.position.x === -2.5 ||
+            choosenShip.position.y === 2.5 ||
+            choosenShip.position.y === -2.5) {
+            return false;
+        } else {
+            return true;
+        }
+    } else if (choosenShip.name === 'mediumShip') {
+        if (isTurned) {
+            if (choosenShip.position.x === 2.5) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        if (choosenShip.position.y === 2.5) {
             return false;
         } else {
             return true;
         }
     }
-};
+}

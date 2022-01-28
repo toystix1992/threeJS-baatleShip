@@ -1,7 +1,7 @@
 import getGLTFModel from '../loaders/gltfLoader';
 import water from './waterGeometry';
 import { findIntersect } from '../helpers/intersect';
-import {lightShipZone, checkFieldBorders} from './checker/checker';
+import {lightShipZone, checkFieldBorders, checkRotateEnable} from './checker/checker';
 
 const setedShips = [];
 let choosenShip = null;
@@ -66,39 +66,43 @@ function moveShip(e) {
         choosenShip != null &&
         !setedShips.includes( choosenShip.name)
     ) {
-        console.log(choosenShip.position);
         if (e.code === 'KeyD') {
-            checkFieldBorders(choosenShip, 'KeyD');
-            choosenShip.position.x += 1;
-            console.log(choosenShip.position);
+            checkFieldBorders(choosenShip, 'KeyD', isTurned)?
+            choosenShip.position.x += 1:choosenShip;
         } else if (e.code === 'KeyA') {
-            choosenShip.position.x -= 1;
+            checkFieldBorders(choosenShip, 'KeyA', isTurned)?
+            choosenShip.position.x -= 1:choosenShip;
         } else if (e.code === 'KeyW') {
-            choosenShip.position.y += 1;
+            checkFieldBorders(choosenShip, 'KeyW', isTurned)?
+            choosenShip.position.y += 1:choosenShip;
         } else if (e.code === 'KeyS') {
-            choosenShip.position.y -= 1;
+            checkFieldBorders(choosenShip, 'KeyS', isTurned)?
+            choosenShip.position.y -= 1:choosenShip;
         } else if (e.code === 'KeyE') {
             if (choosenShip.name === 'mediumShip') {
-                if (!isTurned) {
-                    choosenShip.rotation.y += Math.PI / 2;
-                    choosenShip.position.x -= 0.5;
-                    choosenShip.position.y += 0.5;
-                    isTurned = true;
-                } else {
-                    choosenShip.rotation.y -= Math.PI / 2;
-                    choosenShip.position.x += 0.5;
-                    choosenShip.position.y -= 0.5;
-                    isTurned = false;
+                if (checkRotateEnable(choosenShip, isTurned)) {
+                    if (!isTurned) {
+                        choosenShip.rotation.y += Math.PI / 2;
+                        choosenShip.position.x -= 0.5;
+                        choosenShip.position.y += 0.5;
+                        isTurned = true;
+                    } else {
+                        choosenShip.rotation.y -= Math.PI / 2;
+                        choosenShip.position.x += 0.5;
+                        choosenShip.position.y -= 0.5;
+                        isTurned = false;
+                    }
                 }
             } else {
-                if (!isTurned) {
-                    choosenShip.rotation.y += Math.PI / 2;
-                    isTurned = true;
-                } else {
-                    choosenShip.rotation.y -= Math.PI / 2;
-                    isTurned = false;
+                if (checkRotateEnable(choosenShip, isTurned)) {
+                    if (!isTurned) {
+                        choosenShip.rotation.y += Math.PI / 2;
+                        isTurned = true;
+                    } else {
+                        choosenShip.rotation.y -= Math.PI / 2;
+                        isTurned = false;
+                    }
                 }
-                console.log(isTurned);
             }
         } else if (e.code === 'KeyQ') {
             const shipPosConf = {
