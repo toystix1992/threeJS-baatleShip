@@ -1,7 +1,7 @@
 import getGLTFModel from '../loaders/gltfLoader';
 import water from './waterGeometry';
 import { findIntersect } from '../helpers/intersect';
-import { lightShipZone, checkFieldBorders, checkRotateEnable} from './checker/checker';
+import {checkShipsIntersections, checkFieldBorders, checkRotateEnable} from './checker/checker';
 
 const setedShips = [];
 let choosenShip = null;
@@ -110,10 +110,14 @@ const moveShip = (e) => {
                 pos: choosenShip.position,
                 turn: isTurned
             };
+            if(checkShipsIntersections(shipPosConf)) {
+                alert('Please check');
+            } else {
             choosenShip = null;
             setedShips.push(shipPosConf);
-            lightShipZone(shipPosConf);
-
+            }
+            // console.log(checkShipsIntersections(shipPosConf));
+            // lightShipZone(shipPosConf);
         }
         setedShips.length === 4 ? document.removeEventListener('click', chooseShip) : console.log();
     }
