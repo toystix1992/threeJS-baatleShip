@@ -1,8 +1,10 @@
+import scene from "../helpers/initial/scene";
 import { Color} from 'three';
 import water from '../view/waterGeometry';
 import { plane } from '../helpers/mesh/plane';
 import setedShipsPos from '../storage/setedShipsPos';
 import getPage from '../storage/getPage';
+import gsap from 'gsap';
 
 let shipsZone = [];
 let shipZone;
@@ -257,14 +259,17 @@ const lightShipZone = () => {
     navigateShipZone();
 };
 
-const navigateShipZone = () => {
+const navigateShipZone = async () => {
+    let tween
     if(shipsZone.length === 4 && player === 1) {
+        tween = gsap.to(scene.position, { duration: 1, ease: "elastic", x: 7});
         setedShipsPos.firstPlayer = shipsZone;
-        console.log(setedShipsPos);
         shipsZone = [];
         player = 2;
+        await tween.play();
         water.remove.apply(water, water.children);
         getPage('settingTwo');
+        tween.reverse();
     } else if (shipsZone.length === 4 && player === 2) {
         setedShipsPos.secondPlayer = shipsZone;
         console.log(setedShipsPos);

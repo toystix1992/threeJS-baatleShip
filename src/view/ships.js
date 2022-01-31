@@ -61,6 +61,7 @@ export const chooseShip = () => {
 };
 
 const moveShip = (e) => {
+    console.log(setedShips);
     if (
         choosenShip != null &&
         !setedShips.includes(choosenShip.name)
@@ -115,8 +116,8 @@ const moveShip = (e) => {
                 choosenShip.position.x = -4
                 choosenShip = null;
             } else {
-            choosenShip = null;
             setedShips.push(shipPosConf);
+            choosenShip = null;
             }
         }
         setedShips.length === 8 ? document.removeEventListener('click', chooseShip) : console.log();
