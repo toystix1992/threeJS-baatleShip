@@ -1,7 +1,7 @@
-import getGLTFModel from '../loaders/gltfLoader';
+import getGLTFModel from '../helpers/loaders/gltfLoader';
 import water from './waterGeometry';
 import { findShipIntersect } from '../helpers/intersect';
-import {checkShipsIntersections, checkFieldBorders, checkRotateEnable} from './checker/checker';
+import {checkShipsIntersections, checkFieldBorders, checkRotateEnable} from '../controller/shipController';
 
 const setedShips = [];
 let choosenShip = null;

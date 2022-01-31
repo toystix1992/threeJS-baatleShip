@@ -1,5 +1,5 @@
 import scene from '../helpers/initial/scene';
-import gamePage from '../components/gamePage';
+import {gamePageOne, gamePageTwo} from '../components/gamePage';
 import {settingPageOne, settingPageTwo} from '../components/settingPage';
 import homePage from '../components/homePage';
 
@@ -11,8 +11,10 @@ const getPage = (page) => {
     }
     else if (page === 'home') {
         homePage(scene);
-    } else if (page === 'game') {
-        gamePage(scene);
+    } else if (page === 'gameOne') {
+        gamePageOne(scene);
+    } else if (page === 'gameTwo') {
+        gamePageTwo(scene);
     }
 }
 

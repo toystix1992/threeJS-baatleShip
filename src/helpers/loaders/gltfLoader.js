@@ -1,5 +1,5 @@
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
-import { loadingManager } from "../helpers/loadingManager"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { loadingManager } from "../loadingManager";
 
 const loader = new GLTFLoader(loadingManager)
 

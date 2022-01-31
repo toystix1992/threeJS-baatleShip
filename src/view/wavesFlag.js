@@ -1,7 +1,7 @@
 import {PlaneGeometry, MeshBasicMaterial, Mesh, DoubleSide, TextureLoader} from 'three';
 let flagColor = "#ffffff";
 const texture = new TextureLoader()
-.load( 'textures/buttons/startBtn.png' );
+.load( 'textures/buttons/startBtn.jpg' );
 const geometry = new PlaneGeometry(4,3,1,1);
 const material = new MeshBasicMaterial({
     color: flagColor,

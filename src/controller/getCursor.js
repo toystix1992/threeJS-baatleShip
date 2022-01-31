@@ -1,5 +1,5 @@
 import {PlaneGeometry, MeshBasicMaterial, Mesh} from 'three';
-import ground from './ground';
+import ground from '../view/ground';
 import {mouse} from '../helpers/mousePosition';
 
 const geometry = new PlaneGeometry(3.3, 3.3);

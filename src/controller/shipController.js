@@ -1,8 +1,8 @@
-import { Color, LuminanceFormat } from 'three';
-import water from '../waterGeometry';
-import { plane } from '../../helpers/mesh/plane';
-import setedShipsPos from '../../storage/setedShipsPos';
-import getPage from '../../storage/getPage';
+import { Color} from 'three';
+import water from '../view/waterGeometry';
+import { plane } from '../helpers/mesh/plane';
+import setedShipsPos from '../storage/setedShipsPos';
+import getPage from '../storage/getPage';
 
 let shipsZone = [];
 let shipZone;
@@ -271,7 +271,7 @@ const navigateShipZone = () => {
         shipsZone = [];
         player = 2;
         water.remove.apply(water, water.children);
-        getPage('game');
+        getPage('gameOne');
     }
 }
 

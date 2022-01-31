@@ -31,6 +31,7 @@ body {
   position: absolute;
   left: 40%;
   top: 5%;
-  color: aliceblue;
+  color: rgba(127, 181, 228, 0.486);
   font-size: 48px;
+  font-style: italic;
 }
