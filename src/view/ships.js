@@ -22,7 +22,6 @@ export const ships = () => {
                 if (gltf.scene.name === 'largeShip') {
                     gltf.scene.scale.set(0.6, 0.5, 0.5);
                     gltf.scene.position.set(4.5, 1.5, -0.3);
-
                 } else if (gltf.scene.name === 'mediumShip') {
                     gltf.scene.scale.set(0.5, 0.4, 0.4);
                     gltf.scene.position.set(4.2, 0, -0.12);
@@ -111,17 +110,18 @@ const moveShip = (e) => {
                 turn: isTurned
             };
             if(checkShipsIntersections(shipPosConf)) {
-                alert('Please check');
+                alert('please choose another position');
+                choosenShip.position.y = 1.5;
+                choosenShip.position.x = -4
+                choosenShip = null;
             } else {
             choosenShip = null;
             setedShips.push(shipPosConf);
             }
-            // console.log(checkShipsIntersections(shipPosConf));
-            // lightShipZone(shipPosConf);
         }
-        setedShips.length === 4 ? document.removeEventListener('click', chooseShip) : console.log();
+        setedShips.length === 8 ? document.removeEventListener('click', chooseShip) : console.log();
     }
-}
+};
 
 document.addEventListener('click', chooseShip);
 document.addEventListener('keypress', moveShip);

@@ -1,4 +1,4 @@
-import { Color } from 'three';
+import { Color, LuminanceFormat } from 'three';
 import water from '../waterGeometry';
 import { plane } from '../../helpers/mesh/plane';
 import setedShipsPos from '../../storage/setedShipsPos';
@@ -260,13 +260,17 @@ const lightShipZone = () => {
 const navigateShipZone = () => {
     if(shipsZone.length === 4 && player === 1) {
         setedShipsPos.firstPlayer = shipsZone;
+        console.log(setedShipsPos);
         shipsZone = [];
         player = 2;
+        water.remove.apply(water, water.children);
         getPage('settingTwo');
     } else if (shipsZone.length === 4 && player === 2) {
         setedShipsPos.secondPlayer = shipsZone;
+        console.log(setedShipsPos);
         shipsZone = [];
         player = 2;
+        water.remove.apply(water, water.children);
         getPage('game');
     }
 }

@@ -27,7 +27,7 @@ body {
 .hidden {
   display: none;
 }
-.player-discr {
+.player-title {
   position: absolute;
   left: 40%;
   top: 5%;
