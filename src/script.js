@@ -9,16 +9,15 @@ import controls from './helpers/controls';
 import { getPropertyFromStorage, removePropertyFromStorage, setPropertyToStorage } from "./helpers/localStorage";
 import { loadingScreen, animateLoadingScreen } from './components/loadingScreen';
 import { mousePosition } from './helpers/mousePosition';
-// import { dt, et } from './helpers/time';
-// import cursor from './view/getCursor';
 
 const loadingText = document.querySelector('.loading');
+export let page;
 
 const init = () => {
     //Loading scrin
     loadingScreen();
-    //choose right page
-    getPage();
+    //choose  page
+    getPage('home');
     //Light
     light(scene);
 };

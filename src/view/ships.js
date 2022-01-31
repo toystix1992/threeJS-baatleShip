@@ -1,6 +1,6 @@
 import getGLTFModel from '../loaders/gltfLoader';
 import water from './waterGeometry';
-import { findIntersect } from '../helpers/intersect';
+import { findShipIntersect } from '../helpers/intersect';
 import {checkShipsIntersections, checkFieldBorders, checkRotateEnable} from './checker/checker';
 
 const setedShips = [];
@@ -41,7 +41,7 @@ export const ships = () => {
 };
 
 export const chooseShip = () => {
-    const intersect = findIntersect();
+    const intersect = findShipIntersect();
     if (intersect.length > 0) {
         isTurned = false;
         choosenShip = intersect[0].object.parent.parent;

@@ -1,8 +1,12 @@
 import { Color } from 'three';
 import water from '../waterGeometry';
 import { plane } from '../../helpers/mesh/plane';
-const shipsZone = [];
+import setedShipsPos from '../../storage/setedShipsPos';
+import getPage from '../../storage/getPage';
+
+let shipsZone = [];
 let shipZone;
+let player = 1;
 const config = {
     color: new Color('green'),
     opacity: 0.1,
@@ -250,4 +254,20 @@ const lightShipZone = () => {
         shipLight.position.set(pos.x, pos.y, pos.z);
         water.add(shipLight);
     });
+    navigateShipZone();
 };
+
+const navigateShipZone = () => {
+    if(shipsZone.length === 4 && player === 1) {
+        setedShipsPos.firstPlayer = shipsZone;
+        shipsZone = [];
+        player = 2;
+        getPage('settingTwo');
+    } else if (shipsZone.length === 4 && player === 2) {
+        setedShipsPos.secondPlayer = shipsZone;
+        shipsZone = [];
+        player = 2;
+        getPage('game');
+    }
+}
+
