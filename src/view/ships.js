@@ -61,7 +61,6 @@ export const chooseShip = () => {
 };
 
 const moveShip = (e) => {
-    console.log(setedShips);
     if (
         choosenShip != null &&
         !setedShips.includes(choosenShip.name)

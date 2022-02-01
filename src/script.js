@@ -17,7 +17,7 @@ const init = () => {
     //Loading scrin
     loadingScreen();
     //choose  page
-    getPage('home');
+    getPage('gameOne');
     //Light
     light(scene);
 };

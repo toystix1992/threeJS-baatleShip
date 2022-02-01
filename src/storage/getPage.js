@@ -16,6 +16,6 @@ const getPage = (page) => {
     } else if (page === 'gameTwo') {
         gamePageTwo(scene);
     }
-}
+};
 
 export default getPage;
