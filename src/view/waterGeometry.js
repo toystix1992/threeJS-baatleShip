@@ -9,7 +9,7 @@ const params = {
 };
 
 const waterGeometry = new PlaneGeometry(6, 6);
-const water = new Water(waterGeometry, {
+export const water = new Water(waterGeometry, {
     color: params.color,
     scale: params.scale,
     flowDirection: new Vector2(params.flowX, params.flowY),
@@ -18,4 +18,7 @@ const water = new Water(waterGeometry, {
 });
 water.position.y = 0.5;
 water.rotation.x = Math.PI * - 0.5;
-export default water;
+
+export const newWater = water.clone();
+newWater.position.x = 8;
+

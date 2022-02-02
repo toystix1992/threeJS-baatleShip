@@ -6,6 +6,6 @@ directionalLight.position.set(- 1, 1, 1);
 const lights = [ambientLight, directionalLight];
 const light = (scene) => {
     lights.forEach(lightType =>  scene.add(lightType));
-}
+};
 
 export default light;

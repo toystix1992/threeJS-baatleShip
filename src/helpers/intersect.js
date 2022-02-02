@@ -1,6 +1,6 @@
 import {Raycaster} from 'three';
 import camera from '../helpers/initial/camera';
-import water from '../view/waterGeometry';
+import {water} from '../view/waterGeometry';
 import wavesFlag from '../view/wavesFlag';
 import { mouse } from './mousePosition';
 

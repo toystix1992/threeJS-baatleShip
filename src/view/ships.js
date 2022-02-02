@@ -1,5 +1,5 @@
 import getGLTFModel from '../helpers/loaders/gltfLoader';
-import water from './waterGeometry';
+import {water, newWater} from './waterGeometry';
 import { findShipIntersect } from '../helpers/intersect';
 import {checkShipsIntersections, checkFieldBorders, checkRotateEnable} from '../controller/shipController';
 
@@ -8,14 +8,14 @@ let choosenShip = null;
 let isTurned = false;
 
 export const ships = () => {
-    let ships = null;
+    // let ships = null;
     getGLTFModel(['ships/large.gltf', 'ships/medium.gltf', 'ships/small.gltf', 'ships/small.gltf']).
         then((gltfs) => {
             gltfs[0].scene.name = 'largeShip';
             gltfs[1].scene.name = 'mediumShip';
             gltfs[2].scene.name = 'smallShipOne';
             gltfs[3].scene.name = 'smallShipTwo';
-            ships = gltfs;
+            // ships = gltfs;
             gltfs.forEach((gltf) => {
                 gltf.scene.rotation.x = Math.PI / 2;
                 gltf.scene.rotation.y = Math.PI / 2;
@@ -33,10 +33,11 @@ export const ships = () => {
                         gltf.scene.position.set(4, -2, -0.02);
                     }
                 }
+                newWater.add(gltf.scene);
                 water.add(gltf.scene);
             });
         });
-    return ships;
+    // return ships;
 };
 
 export const chooseShip = () => {

@@ -7,6 +7,7 @@ import gsap from "gsap";
 
 const homePage = (scene) => {
     scene.add(wavesFlag);
+    console.log(scene);
 };
 
 const navToSetting = async () => {

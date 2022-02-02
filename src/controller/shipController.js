@@ -1,6 +1,6 @@
 import scene from "../helpers/initial/scene";
 import { Color} from 'three';
-import water from '../view/waterGeometry';
+import {water, newWater} from '../view/waterGeometry';
 import { plane } from '../helpers/mesh/plane';
 import setedShipsPos from '../storage/setedShipsPos';
 import getPage from '../storage/getPage';

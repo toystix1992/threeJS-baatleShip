@@ -1,7 +1,8 @@
 import {PlaneGeometry, MeshStandardMaterial, Mesh, TextureLoader} from "three";
 import { loadingManager } from "../helpers/loadingManager";
 
-const groundGeometry = new PlaneGeometry(6, 6)
+const getGround = () => {
+  const groundGeometry = new PlaneGeometry(6, 6);
 const groundMaterial = new MeshStandardMaterial({
   roughness: 0.8,
   metalness: 0.4,
@@ -18,5 +19,28 @@ textureLoader.load("textures/fieldTexture.jpg", (map) => {
   groundMaterial.needsUpdate = true;
 });
 ground.rotation.x = Math.PI * - 0.5;
+}
 
-export default ground;
+
+const groundGeometry = new PlaneGeometry(6, 6);
+const groundMaterial = new MeshStandardMaterial({
+  roughness: 0.8,
+  metalness: 0.4,
+});
+export const ground = new Mesh(groundGeometry, groundMaterial);
+const textureLoader = new TextureLoader(loadingManager);
+
+textureLoader.load("textures/fieldTexture.jpg", (map) => {
+  map.wrapS = TextureLoader.RepeatWrapping;
+  map.wrapT = TextureLoader.RepeatWrapping;
+  map.anisotropy = 16;
+  map.repeat.set(6, 6);
+  groundMaterial.map = map;
+  groundMaterial.needsUpdate = true;
+});
+ground.rotation.x = Math.PI * - 0.5;
+
+export const newGround = ground.clone();
+newGround.position.x = 8;
+
+

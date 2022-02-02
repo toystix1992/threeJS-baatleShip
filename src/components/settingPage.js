@@ -1,5 +1,5 @@
-import water from '../view/waterGeometry';
-import ground from '../view/ground';
+import {water, newWater} from '../view/waterGeometry';
+import {ground, newGround} from '../view/ground';
 import {ships} from '../view/ships';
 const body = document.querySelector('body');
 let playerTitile = null;
@@ -10,24 +10,16 @@ const addDiscription = (PlayerNumber) => {
     body.insertAdjacentHTML( 'beforeend', element );
 };
 
-export const settingPageOne = (scene) => {
+export const settingPage = (scene) => {
     addDiscription('1');
     //ground
     scene.add(ground);
+    scene.add(newGround);
     //water
     scene.add(water);
+    scene.add(newWater);
     //model
     ships();
 };
 
-export const settingPageTwo = (scene) => {
-    playerTitile= document.querySelector('.player-title');
-    playerTitile.remove();
-    addDiscription('2');
-    //ground
-    scene.add(ground);
-    //water
-    scene.add(water);
-    //model
-    ships();
-};
+
