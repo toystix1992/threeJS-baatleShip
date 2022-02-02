@@ -8,17 +8,22 @@ const params = {
     flowY: 1
 };
 
-const waterGeometry = new PlaneGeometry(6, 6);
-export const water = new Water(waterGeometry, {
-    color: params.color,
-    scale: params.scale,
-    flowDirection: new Vector2(params.flowX, params.flowY),
-    textureWidth: 1024,
-    textureHeight: 1024
-});
-water.position.y = 0.5;
-water.rotation.x = Math.PI * - 0.5;
-
-export const newWater = water.clone();
-newWater.position.x = 8;
+const getWater = (xPos) => {
+    const waterGeometry = new PlaneGeometry(6, 6);
+    const water = new Water(waterGeometry, {
+        color: params.color,
+        scale: params.scale,
+        flowDirection: new Vector2(params.flowX, params.flowY),
+        textureWidth: 1024,
+        textureHeight: 1024
+    });
+    water.position.y = 0.5;
+    water.position.x = xPos;
+    water.rotation.x = Math.PI * - 0.5;
+    return water;
+};
+export const water = getWater(0);
+export const newWater = getWater(8);
+// export const newWater = water.clone();
+// newWater.position.x = 8;
 

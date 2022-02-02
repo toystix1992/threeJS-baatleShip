@@ -1,6 +1,6 @@
 import {water, newWater} from '../view/waterGeometry';
 import {ground, newGround} from '../view/ground';
-import {ships} from '../view/ships';
+import {ships, cloneShips} from '../view/ships';
 const body = document.querySelector('body');
 let playerTitile = null;
 
@@ -20,6 +20,7 @@ export const settingPage = (scene) => {
     scene.add(newWater);
     //model
     ships();
+    cloneShips();
 };
 
 

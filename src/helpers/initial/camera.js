@@ -12,6 +12,6 @@ const camera = new PerspectiveCamera(
         perspectiveCamera.pos.y,
         perspectiveCamera.pos.z
         );
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(4, 0, 0);
 
 export default camera;
