@@ -8,9 +8,14 @@ const addDiscription = (PlayerNumber) => {
     const element = `<h1 class="player-title"> Player ${PlayerNumber}</h1>`;
     body.insertAdjacentHTML( 'beforeend', element );
 };
+const turnShipBtn = () => {
+    const element = `<span class='start-btn'>turn ship</span>`;
+    body.insertAdjacentHTML( 'beforeend', element );
+};
 
 export const settingPage = (scene) => {
     addDiscription(getPlayer());
+    turnShipBtn();
     //first player
     scene.add(ground);
     scene.add(newGround);

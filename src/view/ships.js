@@ -8,7 +8,7 @@ import { getPlayer, setPlayer } from '../storage/player';
 
 const setedShips = [];
 let choosenShip = null;
-let isTurned = false;
+let isTurned = null;
 let intersect, newShipPos;
 let ismouseDown = false;
 
@@ -64,28 +64,53 @@ export const chooseShip = () => {
     if (intersect.length > 1) {
         isTurned = false;
         choosenShip = intersect[0].object.parent.parent;
-        console.log(choosenShip.position);
     }
 };
 const getNewShipPpos = () => {
     intersect = shipsIntersect();
-    if (intersect.length === 1 && ismouseDown) {
+    if (intersect.length === 1 && ismouseDown && choosenShip) {
         newShipPos = intersect[0].point;
-    }
-};
-
-const setNewShipPos = () => {
-    ismouseDown = false;
-    console.log(newShipPos);
-    if (newShipPos) {
         choosenShip.position.set(
             newShipPos.x,
             -newShipPos.z,
             choosenShip.position.z
         );
     }
+};
 
-}
+const setNewShipPos = () => {
+    let x, y;
+    ismouseDown = false;
+    if (newShipPos && choosenShip) {
+        if (
+            choosenShip.name === 'largeShip' ||
+            choosenShip.name === 'smallShipOne' ||
+            choosenShip.name === 'smallShipTwo'
+        ) {
+            ((Math.round((newShipPos.x) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
+                x = Math.round((newShipPos.x) * 2) / 2 - 0.5 :
+                x = Math.round((newShipPos.x) * 2) / 2;
+            ((Math.round((newShipPos.z) * 2) / 2) ^ 0) === Math.round((newShipPos.z) * 2) / 2 ?
+                y = Math.round((-newShipPos.z) * 2) / 2 + 0.5 :
+                y = Math.round((-newShipPos.z) * 2) / 2;
+        } else if (choosenShip.name === 'mediumShip') {
+            ((Math.round((newShipPos.x) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
+                x = Math.round((newShipPos.x) * 2) / 2 :
+                x = Math.round((newShipPos.x) * 2) / 2 - 0.5;
+            ((Math.round((newShipPos.z) * 2) / 2) ^ 0) === Math.round((newShipPos.z) * 2) / 2 ?
+                y = Math.round((-newShipPos.z) * 2) / 2 + 0.5 :
+                y = Math.round((-newShipPos.z) * 2) / 2;
+        }
+        console.log(x, y);
+        console.log(checkFieldBorders(choosenShip, x, y, isTurned));
+        if (!checkFieldBorders(choosenShip, x, y, isTurned)) {
+            return;
+        } else {
+            choosenShip.position.set(x, y, choosenShip.position.z);
+            console.log(x, y);
+        }
+    }
+};
 
 
 document.addEventListener('pointerdown', chooseShip);

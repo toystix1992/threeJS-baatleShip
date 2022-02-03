@@ -1,8 +1,8 @@
 export const perspectiveCamera = {
-    fov: 65,
+    fov: 45,
     near: 0.1,
     far: 70,
-    pos: {x:5, y:10, z:3}
+    pos: {x:0, y:9, z:3}
 };
 export const initialShipPos = {
     large: {x:4.5, y:1.5, z:-0.3},
