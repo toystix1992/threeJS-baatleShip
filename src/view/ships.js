@@ -1,77 +1,110 @@
 import getGLTFModel from '../helpers/loaders/gltfLoader';
 import {water, newWater} from './waterGeometry';
-import { findShipIntersect } from '../helpers/intersect';
+import { firstPlayerIntersect, secondPlayerIntersect } from '../helpers/intersect';
 import {checkShipsIntersections, checkFieldBorders, checkRotateEnable} from '../controller/shipController';
+import {initialShipPos} from '../config/config';
 
 const setedShips = [];
 let choosenShip = null;
 let isTurned = false;
+let player = 'first';
+let intersect;
+
 
 export const ships = () => {
-    // let ships = null;
     getGLTFModel(['ships/large.gltf', 'ships/medium.gltf', 'ships/small.gltf', 'ships/small.gltf']).
         then((gltfs) => {
             gltfs[0].scene.name = 'largeShip';
             gltfs[1].scene.name = 'mediumShip';
             gltfs[2].scene.name = 'smallShipOne';
             gltfs[3].scene.name = 'smallShipTwo';
-            // ships = gltfs;
             gltfs.forEach((gltf) => {
                 gltf.scene.rotation.x = Math.PI / 2;
                 gltf.scene.rotation.y = Math.PI / 2;
                 if (gltf.scene.name === 'largeShip') {
                     gltf.scene.scale.set(0.6, 0.5, 0.5);
-                    gltf.scene.position.set(4.5, 1.5, -0.3);
+                    gltf.scene.position.set(
+                        initialShipPos.large.x,
+                        initialShipPos.large.y,
+                        initialShipPos.large.z
+                    );
                 } else if (gltf.scene.name === 'mediumShip') {
                     gltf.scene.scale.set(0.5, 0.4, 0.4);
-                    gltf.scene.position.set(4.2, 0, -0.12);
+                    gltf.scene.position.set(
+                        initialShipPos.medium.x,
+                        initialShipPos.medium.y,
+                        initialShipPos.medium.z
+                    );
                 } else {
                     gltf.scene.scale.set(1, 1, 1);
                     if (gltf.scene.name === 'smallShipOne') {
-                        gltf.scene.position.set(4, -1, -0.02);
+                        gltf.scene.position.set(
+                        initialShipPos.smallOne.x,
+                        initialShipPos.smallOne.y,
+                        initialShipPos.smallOne.z
+                        );
                     } else if (gltf.scene.name === 'smallShipTwo') {
-                        gltf.scene.position.set(4, -2, -0.02);
+                        gltf.scene.position.set(
+                        initialShipPos.smallTwo.x,
+                        initialShipPos.smallTwo.y,
+                        initialShipPos.smallTwo.z
+                        );
                     }
                 }
+                const cloneShips = gltf.scene.clone();
                 water.add(gltf.scene);
+                newWater.add(cloneShips);
             });
         });
-    // return ships;
 };
-export const cloneShips = () => {
-    // let ships = null;
-    getGLTFModel(['ships/large.gltf', 'ships/medium.gltf', 'ships/small.gltf', 'ships/small.gltf']).
-        then((gltfs) => {
-            gltfs[0].scene.name = 'largeShip';
-            gltfs[1].scene.name = 'mediumShip';
-            gltfs[2].scene.name = 'smallShipOne';
-            gltfs[3].scene.name = 'smallShipTwo';
-            // ships = gltfs;
-            gltfs.forEach((gltf) => {
-                gltf.scene.rotation.x = Math.PI / 2;
-                gltf.scene.rotation.y = Math.PI / 2;
-                if (gltf.scene.name === 'largeShip') {
-                    gltf.scene.scale.set(0.6, 0.5, 0.5);
-                    gltf.scene.position.set(4.5, 1.5, -0.3);
-                } else if (gltf.scene.name === 'mediumShip') {
-                    gltf.scene.scale.set(0.5, 0.4, 0.4);
-                    gltf.scene.position.set(4.2, 0, -0.12);
-                } else {
-                    gltf.scene.scale.set(1, 1, 1);
-                    if (gltf.scene.name === 'smallShipOne') {
-                        gltf.scene.position.set(4, -1, -0.02);
-                    } else if (gltf.scene.name === 'smallShipTwo') {
-                        gltf.scene.position.set(4, -2, -0.02);
-                    }
-                }
-                newWater.add(gltf.scene);
-            });
-        });
-    // return ships;
-};
-
+// export const cloneShips = () => {
+//     getGLTFModel(['ships/large.gltf', 'ships/medium.gltf', 'ships/small.gltf', 'ships/small.gltf']).
+//         then((gltfs) => {
+//             gltfs[0].scene.name = 'largeShip';
+//             gltfs[1].scene.name = 'mediumShip';
+//             gltfs[2].scene.name = 'smallShipOne';
+//             gltfs[3].scene.name = 'smallShipTwo';
+//             gltfs.forEach((gltf) => {
+//                 gltf.scene.rotation.x = Math.PI / 2;
+//                 gltf.scene.rotation.y = Math.PI / 2;
+//                 if (gltf.scene.name === 'largeShip') {
+//                     gltf.scene.scale.set(0.6, 0.5, 0.5);
+//                     gltf.scene.position.set(
+//                         initialShipPos.large.x,
+//                         initialShipPos.large.y,
+//                         initialShipPos.large.z
+//                     );
+//                 } else if (gltf.scene.name === 'mediumShip') {
+//                     gltf.scene.scale.set(0.5, 0.4, 0.4);
+//                     gltf.scene.position.set(
+//                         initialShipPos.medium.x,
+//                         initialShipPos.medium.y,
+//                         initialShipPos.medium.z
+//                     );
+//                 } else {
+//                     gltf.scene.scale.set(1, 1, 1);
+//                     if (gltf.scene.name === 'smallShipOne') {
+//                         gltf.scene.position.set(
+//                         initialShipPos.smallOne.x,
+//                         initialShipPos.smallOne.y,
+//                         initialShipPos.smallOne.z
+//                         );
+//                     } else if (gltf.scene.name === 'smallShipTwo') {
+//                         gltf.scene.position.set(
+//                         initialShipPos.smallTwo.x,
+//                         initialShipPos.smallTwo.y,
+//                         initialShipPos.smallTwo.z
+//                         );
+//                     }
+//                 }
+//                 newWater.add(gltf.scene);
+//             });
+//         });
+// };
 export const chooseShip = () => {
-    const intersect = findShipIntersect();
+    player === 'first'?
+    intersect = firstPlayerIntersect():
+    intersect = secondPlayerIntersect();
     if (intersect.length > 0) {
         isTurned = false;
         choosenShip = intersect[0].object.parent.parent;

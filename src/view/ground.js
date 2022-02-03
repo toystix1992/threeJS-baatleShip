@@ -41,6 +41,6 @@ textureLoader.load("textures/fieldTexture.jpg", (map) => {
 ground.rotation.x = Math.PI * - 0.5;
 
 export const newGround = ground.clone();
-newGround.position.x = 8;
+newGround.position.x = 10;
 
 

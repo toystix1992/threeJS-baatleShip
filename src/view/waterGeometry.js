@@ -7,7 +7,6 @@ const params = {
     flowX: 1,
     flowY: 1
 };
-
 const getWater = (xPos) => {
     const waterGeometry = new PlaneGeometry(6, 6);
     const water = new Water(waterGeometry, {
@@ -23,7 +22,6 @@ const getWater = (xPos) => {
     return water;
 };
 export const water = getWater(0);
-export const newWater = getWater(8);
-// export const newWater = water.clone();
-// newWater.position.x = 8;
+export const newWater = getWater(10);
+
 
