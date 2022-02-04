@@ -101,13 +101,11 @@ const setNewShipPos = () => {
                 y = Math.round((-newShipPos.z) * 2) / 2 + 0.5 :
                 y = Math.round((-newShipPos.z) * 2) / 2;
         }
-        console.log(x, y);
-        console.log(checkFieldBorders(choosenShip, x, y, isTurned));
-        if (!checkFieldBorders(choosenShip, x, y, isTurned)) {
-            return;
-        } else {
+        if(x<=2.5 && y<=2.5 && x>=-2.5 && y>=-2.5) {
             choosenShip.position.set(x, y, choosenShip.position.z);
             console.log(x, y);
+        } else {
+
         }
     }
 };
