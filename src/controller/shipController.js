@@ -7,7 +7,7 @@ import getPage from '../storage/getPage';
 import gsap from 'gsap';
 
 let shipsZone = [];
-let shipZone;
+let curentShip;
 let player = 1;
 const config = {
     color: new Color('green'),
@@ -20,238 +20,198 @@ export const checkFieldBorders = (choosenShip, x, y, isTurned) => {
         choosenShip.name === 'smallShipOne' ||
         choosenShip.name === 'smallShipTwo') {
         if (x <= 2.5 && y <= 2.5 && x >= -2.5 && y >= -2.5) {
-            choosenShip.position.set(x, y, choosenShip.position.z);
-            console.log(x, y);
+            return true;
         } else {
             return false;
         }
+    } else if (choosenShip.name === 'mediumShip') {
+        if (!isTurned) {
+            if (x <= 2 && y <= 2.5 && x >= -2 && y >= -2.5) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (isTurned) {
+            if (x <= 2.5 && y <= 2 && x >= -2.5 && y >= -2) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    } else if (choosenShip.name === 'largeShip') {
+        if (!isTurned) {
+            if (x <= 1.5 && y <= 2.5 && x >= -1.5 && y >= -2.5) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (isTurned) {
+            if (x <= 2.5 && y <= 1.5 && x >= -2.5 && y >= -1.5) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
-
-    //     else if (
-    //         choosenShip.name === 'largeShip' ||
-    //         choosenShip.name === 'mediumShip') {
-    //         if (!isTurned) {
-    //             if (choosenShip.position.x > 1) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         } else if (isTurned) {
-    //             if (choosenShip.position.x > 1.5) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    // if (keyCode === 'KeyA') {
-    //     if (choosenShip.name === 'smallShipOne' ||
-    //         choosenShip.name === 'smallShipTwo') {
-    //         if (choosenShip.position.x < -1.5) {
-    //             return false;
-    //         } else {
-    //             return true;
-    //         }
-    //     } else if (
-    //         choosenShip.name === 'largeShip' ||
-    //         choosenShip.name === 'mediumShip') {
-    //         if (!isTurned) {
-    //             if (choosenShip.position.x < -1) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         } else if (isTurned) {
-    //             if (choosenShip.position.x < -1.5) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    // }
-    // if (keyCode === 'KeyW') {
-    //     if (choosenShip.name === 'smallShipOne' ||
-    //         choosenShip.name === 'smallShipTwo') {
-    //         if (choosenShip.position.y > 1.5) {
-    //             return false;
-    //         } else {
-    //             return true;
-    //         }
-    //     } if (
-    //         choosenShip.name === 'largeShip' ||
-    //         choosenShip.name === 'mediumShip') {
-    //         if (isTurned) {
-    //             if (choosenShip.position.y > 1) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         } else if (!isTurned) {
-    //             if (choosenShip.position.y > 1.5) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    // }
-    // if (keyCode === 'KeyS') {
-    //     if (choosenShip.name === 'smallShipOne' ||
-    //         choosenShip.name === 'smallShipTwo') {
-    //         if (choosenShip.position.y < -1.5) {
-    //             return false;
-    //         } else {
-    //             return true;
-    //         }
-    //     } else if (
-    //         choosenShip.name === 'largeShip' ||
-    //         choosenShip.name === 'mediumShip') {
-    //         if (isTurned) {
-    //             if (choosenShip.position.y < -1) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         } else if (!isTurned) {
-    //             if (choosenShip.position.y < -1.5) {
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    // }
 };
 
-// export const checkRotateEnable = (choosenShip, isTurned) => {
-//     if (choosenShip.name === 'smallShipTwo' ||
-//         choosenShip.name === 'smallShipTwo') {
-//         return true;
-//     } else if (choosenShip.name === 'largeShip') {
-//         if (choosenShip.position.x === 2.5 ||
-//             choosenShip.position.x === -2.5 ||
-//             choosenShip.position.y === 2.5 ||
-//             choosenShip.position.y === -2.5) {
-//             return false;
-//         } else {
-//             return true;
-//         }
-//     } else if (choosenShip.name === 'mediumShip') {
-//         if (isTurned) {
-//             if (choosenShip.position.x === 2.5) {
-//                 return false;
-//             } else {
-//                 return true;
-//             }
-//         }
-//         if (choosenShip.position.y === 2.5) {
-//             return false;
-//         } else {
-//             return true;
-//         }
-//     }
-// };
-// const addPos = (x, y) => {
-//     return {
-//         x: x,
-//         y: y,
-//         z: 0.01
-//     };
+export const checkRotateEnable = (choosenShip, x, y, isTurned) => {
+    if (!choosenShip) return;
+    if (choosenShip.name === 'smallShipOne' ||
+        choosenShip.name === 'smallShipTwo') {
+        return true;
+    } else if (choosenShip.name === 'largeShip') {
+        if (
+            x <= 1.5 && x >= -1.5 &&
+            y <= 1.5 && y >= -1.5
+        ) {
+            return true;
+        }
+    } else if (choosenShip.name === 'mediumShip') {
+        if (!isTurned) {
+            if (y <= 1.5) {
+                return true;
+            }
+        } else if (isTurned) {
+            if (x <= 1.5) {
+                return true;
+            }
+        }
 
-// };
+    }
 
-// export const checkShipsIntersections = (shipPosConf) => {
-//     shipZone = [shipPosConf.name];
-//     if (shipPosConf.name === 'largeShip') {
-//         if (!shipPosConf.turn) {
-//             shipZone.push([
-//                 addPos(
-//                     shipPosConf.pos.x - 1,
-//                     shipPosConf.pos.y
-//                 ),
-//                 addPos(
-//                     shipPosConf.pos.x,
-//                     shipPosConf.pos.y
-//                 ),
-//                 addPos(
-//                     shipPosConf.pos.x + 1,
-//                     shipPosConf.pos.y
-//                 )
-//             ]);
-//         } else {
-//             shipZone.push([
-//                 addPos(
-//                     shipPosConf.pos.x,
-//                     shipPosConf.pos.y - 1
-//                 ),
-//                 addPos(
-//                     shipPosConf.pos.x,
-//                     shipPosConf.pos.y
-//                 ),
-//                 addPos(
-//                     shipPosConf.pos.x,
-//                     shipPosConf.pos.y + 1
-//                 )
-//             ]);
-//         }
-//     } else if (shipPosConf.name === 'mediumShip') {
-//         if (!shipPosConf.turn) {
-//             shipZone.push([
-//                 addPos(
-//                     shipPosConf.pos.x - 0.5,
-//                     shipPosConf.pos.y
-//                 ),
-//                 addPos(
-//                     shipPosConf.pos.x + 0.5,
-//                     shipPosConf.pos.y
-//                 )
-//             ]);
-//         } else {
-//             shipZone.push([
-//                 addPos(
-//                     shipPosConf.pos.x,
-//                     shipPosConf.pos.y - 0.5
-//                 ),
-//                 addPos(
-//                     shipPosConf.pos.x,
-//                     shipPosConf.pos.y + 0.5
-//                 )
-//             ]);
-//         }
-//     } else if (shipPosConf.name === 'smallShipOne') {
-//         shipZone.push([
-//             addPos(
-//                 shipPosConf.pos.x,
-//                 shipPosConf.pos.y
-//             )]);
-//     } else if (shipPosConf.name === 'smallShipTwo') {
-//         shipZone.push([
-//             addPos(
-//                 shipPosConf.pos.x,
-//                 shipPosConf.pos.y
-//             )]);
-//     }
-//     const positions = [];
-//     shipZone[1].forEach(pos => {
-//         const curPos = `${pos.x}:${pos.y}`;
-//         positions.push(curPos);
-//     });
-//     shipsZone.forEach(prevShipZone => {
-//         prevShipZone[1].forEach(pos => {
-//             const prevPos = `${pos.x}:${pos.y}`;
-//             positions.push(prevPos);
-//         });
-//     });
-//     const unicPositions = [...new Set(positions)];
-//     if (positions.length === unicPositions.length) {
-//         shipsZone.push(shipZone);
-//         lightShipZone();
-//         return false;
-//     } else {
-//         return true;
-//     }
-// };
+};
+const addPos = (x, y) => {
+    return {
+        x: x,
+        y: y,
+        z: 0.01
+    };
+};
+export const checkShipsIntersections = (shipPosConf, turn) => {
+    let intersect = null;
+    curentShip = shipPosConf.name;
+    if (curentShip === 'largeShip') {
+        !turn ?
+            shipsZone[0] = [
+                curentShip,
+                [
+                    addPos(
+                        shipPosConf.position.x - 1,
+                        shipPosConf.position.y
+                    ),
+                    addPos(
+                        shipPosConf.position.x,
+                        shipPosConf.position.y
+                    ),
+                    addPos(
+                        shipPosConf.position.x + 1,
+                        shipPosConf.position.y
+                    )
+                ]] :
+            shipsZone[0] = [
+                curentShip,
+                [
+                    addPos(
+                        shipPosConf.position.x,
+                        shipPosConf.position.y - 1
+                    ),
+                    addPos(
+                        shipPosConf.position.x,
+                        shipPosConf.position.y
+                    ),
+                    addPos(
+                        shipPosConf.position.x,
+                        shipPosConf.position.y + 1
+                    )
+                ]];
+    } else if (curentShip === 'mediumShip') {
+        !turn ? shipsZone[1] = [
+            curentShip,
+            [
+                addPos(
+                    shipPosConf.position.x - 0.5,
+                    shipPosConf.position.y
+                ),
+                addPos(
+                    shipPosConf.position.x + 0.5,
+                    shipPosConf.position.y
+                )
+            ]] : shipsZone[1] = [
+                curentShip,
+                [
+                    addPos(
+                        shipPosConf.position.x - 0.5,
+                        shipPosConf.position.y
+                    ),
+                    addPos(
+                        shipPosConf.position.x - 0.5,
+                        shipPosConf.position.y + 1
+                    )
+                ]];
+    } else if (curentShip === 'smallShipOne') {
+        shipsZone[2] = [
+            curentShip,
+            [
+                addPos(
+                    shipPosConf.position.x,
+                    shipPosConf.position.y
+                )
+            ]];
+    } else if (curentShip === 'smallShipTwo') {
+        shipsZone[3] = [
+            curentShip,
+            [
+                addPos(
+                    shipPosConf.position.x,
+                    shipPosConf.position.y
+                )
+            ]];
+    }
+    const prevPositions = [];
+    const curPositions = [];
+    let prevPos, curPos;
+    shipsZone.forEach(shipZone => {
+        shipZone[1].forEach(pos => {
+            if (shipZone[0] === curentShip) {
+                curPos = `${pos.x}:${pos.y}`;
+                curPositions.push(curPos);
+            } else {
+                prevPos = `${pos.x}:${pos.y}`;
+                prevPositions.push(prevPos);
+            }
+        });
+    });
+    curPositions.forEach(current => {
+        if (prevPositions.length === 0) {
+            intersect = true;
+        } else {
+            console.log(prevPos.includes(current));
+            if (!prevPos.includes(current)) {
+                intersect = true;
+            } else {
+                intersect = false;
+            }
+        }
+
+    });
+    console.log(curPositions, prevPositions, turn);
+    return intersect;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // const lightShipZone = () => {
 //     shipZone[1].forEach(pos => {
 //         const shipLight = plane(1, 1, config);

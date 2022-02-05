@@ -5,12 +5,15 @@ import { checkShipsIntersections, checkFieldBorders, checkRotateEnable }
     from '../controller/shipController';
 import { initialShipPos } from '../config/config';
 import { getPlayer, setPlayer } from '../storage/player';
+import { clock, dt, et } from '../helpers/time';
 
-const setedShips = [];
+const setShips = document.querySelector('.turn-btn');
+let x, y;
 let choosenShip = null;
 let isTurned = null;
-let intersect, newShipPos;
+let intersect, newShipPos, shipPosConf;
 let ismouseDown = false;
+let elTime = null;
 
 export const ships = () => {
     getGLTFModel(['ships/large.gltf', 'ships/medium.gltf', 'ships/small.gltf', 'ships/small.gltf']).
@@ -59,10 +62,12 @@ export const ships = () => {
         });
 };
 export const chooseShip = () => {
+    clock.start();
     ismouseDown = true;
     intersect = shipsIntersect();
     if (intersect.length > 1) {
-        isTurned = false;
+        isTurned === null ?
+            isTurned = false : isTurned;
         choosenShip = intersect[0].object.parent.parent;
     }
 };
@@ -79,7 +84,6 @@ const getNewShipPpos = () => {
 };
 
 const setNewShipPos = () => {
-    let x, y;
     ismouseDown = false;
     if (newShipPos && choosenShip) {
         if (
@@ -94,24 +98,97 @@ const setNewShipPos = () => {
                 y = Math.round((-newShipPos.z) * 2) / 2 + 0.5 :
                 y = Math.round((-newShipPos.z) * 2) / 2;
         } else if (choosenShip.name === 'mediumShip') {
-            ((Math.round((newShipPos.x) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
-                x = Math.round((newShipPos.x) * 2) / 2 :
-                x = Math.round((newShipPos.x) * 2) / 2 - 0.5;
-            ((Math.round((newShipPos.z) * 2) / 2) ^ 0) === Math.round((newShipPos.z) * 2) / 2 ?
-                y = Math.round((-newShipPos.z) * 2) / 2 + 0.5 :
-                y = Math.round((-newShipPos.z) * 2) / 2;
+            if (!isTurned) {
+                ((Math.round((newShipPos.x) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
+                    x = Math.round((newShipPos.x) * 2) / 2 :
+                    x = Math.round((newShipPos.x) * 2) / 2 - 0.5;
+                ((Math.round((newShipPos.z) * 2) / 2) ^ 0) === Math.round((newShipPos.z) * 2) / 2 ?
+                    y = Math.round((-newShipPos.z) * 2) / 2 + 0.5 :
+                    y = Math.round((-newShipPos.z) * 2) / 2;
+            } else {
+                ((Math.round((newShipPos.x) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
+                    x = Math.round((newShipPos.x) * 2) / 2 - 0.5 :
+                    x = Math.round((newShipPos.x) * 2) / 2;
+                ((Math.round((newShipPos.z) * 2) / 2) ^ 0) === Math.round((newShipPos.z) * 2) / 2 ?
+                    y = Math.round((-newShipPos.z) * 2) / 2 :
+                    y = Math.round((-newShipPos.z) * 2) / 2 + 0.5;
+            }
         }
-        if(x<=2.5 && y<=2.5 && x>=-2.5 && y>=-2.5) {
+        shipPosConf = {
+            name: choosenShip.name,
+            position: {
+                x: x,
+                y: y
+            }
+        };
+        console.log(checkShipsIntersections(shipPosConf, isTurned));
+        if (checkFieldBorders(choosenShip, x, y, isTurned)) {
             choosenShip.position.set(x, y, choosenShip.position.z);
-            console.log(x, y);
         } else {
-
+            choosenShip.rotation.set(Math.PI / 2, Math.PI / 2, 0);
+            isTurned = false;
+            if (choosenShip.name === 'smallShipOne') {
+                choosenShip.position.set(
+                    initialShipPos.smallOne.x,
+                    initialShipPos.smallOne.y,
+                    initialShipPos.smallOne.z
+                );
+            } else if (choosenShip.name === 'smallShipTwo') {
+                choosenShip.position.set(
+                    initialShipPos.smallTwo.x,
+                    initialShipPos.smallTwo.y,
+                    initialShipPos.smallTwo.z
+                );
+            } else if (choosenShip.name === 'mediumShip') {
+                choosenShip.position.set(
+                    initialShipPos.medium.x,
+                    initialShipPos.medium.y,
+                    initialShipPos.medium.z
+                );
+            } else if (choosenShip.name === 'largeShip') {
+                choosenShip.position.set(
+                    initialShipPos.large.x,
+                    initialShipPos.large.y,
+                    initialShipPos.large.z
+                );
+            }
+        }
+    }
+    choosenShip = null;
+};
+const turnShip = () => {
+    if (checkRotateEnable(choosenShip, x, y, isTurned)) {
+        isTurned ? isTurned = false : isTurned = true;
+        console.log(checkShipsIntersections(shipPosConf, isTurned));
+        if(!choosenShip) return;
+        if (choosenShip.name === 'mediumShip') {
+            if (isTurned) {
+                choosenShip.rotation.y += Math.PI / 2;
+                x = choosenShip.position.x -= 0.5;
+                y = choosenShip.position.y += 0.5;
+            } else {
+                choosenShip.rotation.y -= Math.PI / 2;
+                x = choosenShip.position.x += 0.5;
+                y = choosenShip.position.y -= 0.5;
+            }
+        } else {
+            if (isTurned) {
+                choosenShip.rotation.y += Math.PI / 2;
+            } else {
+                choosenShip.rotation.y -= Math.PI / 2;
+            }
         }
     }
 };
-
+const turnMoveToggle = () => {
+    clock.stop();
+    elTime = clock.elapsedTime;
+    elTime < 0.25 ?
+        turnShip() : setNewShipPos();
+    choosenShip = null;
+};
 
 document.addEventListener('pointerdown', chooseShip);
 document.addEventListener('pointermove', getNewShipPpos);
-document.addEventListener('pointerup', setNewShipPos);
+document.addEventListener('pointerup', turnMoveToggle);
 

@@ -22,6 +22,6 @@ const getWater = (xPos) => {
     return water;
 };
 export const water = getWater(0);
-export const newWater = getWater(10);
+export const newWater = getWater(15);
 
 

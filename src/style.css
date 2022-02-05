@@ -35,12 +35,11 @@ body {
   font-size: 48px;
   font-style: italic;
 }
-.start-btn {
+.turn-btn {
   position: absolute;
   top: 35vh;
   left: 30px;
   text-align: center;
-  display: inline-block;
   margin: 5px;
   font-weight: bold;
   padding: 10px 0 10px 10px;
@@ -51,6 +50,6 @@ body {
   box-shadow: 0 0.2em gray;
   cursor: pointer;
 }
-.start-btn:active {
+.turn-btn:active {
   box-shadow: none;
 }
