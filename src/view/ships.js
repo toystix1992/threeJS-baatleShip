@@ -122,9 +122,10 @@ const setNewShipPos = () => {
             checkFieldBorders(choosenShip, x, y, choosenShip.turn) &&
             checkShipsIntersections(shipPosConf, choosenShip.turn)
         ) {
-            console.log('move', x, y);
+            // console.log('move', x, y);
             choosenShip.position.set(x, y, choosenShip.position.z);
         } else {
+            alert('ship intersect!');
             choosenShip.rotation.set(Math.PI / 2, Math.PI / 2, 0);
             choosenShip.turn = false;
             if (choosenShip.name === 'smallShipOne') {
@@ -152,6 +153,14 @@ const setNewShipPos = () => {
                     initialShipPos.large.z
                 );
             }
+            shipPosConf = {
+                name: choosenShip.name,
+                position: {
+                    x: Math.random().toString(36).substring(7),
+                    y: Math.random().toString(36).substring(7)
+                }
+            };
+            checkShipsIntersections(shipPosConf, choosenShip.turn);
         }
     }
     choosenShip = null;

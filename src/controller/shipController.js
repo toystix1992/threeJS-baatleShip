@@ -140,8 +140,8 @@ export const checkShipsIntersections = (shipPosConf, turn) => {
                 curentShip,
                 [
                     addPos(
-                        shipPosConf.position.x ,
-                        shipPosConf.position.y +0.5
+                        shipPosConf.position.x,
+                        shipPosConf.position.y + 0.5
                     ),
                     addPos(
                         shipPosConf.position.x,
@@ -167,7 +167,7 @@ export const checkShipsIntersections = (shipPosConf, turn) => {
                 )
             ]];
     }
-    const positions = [];
+    let positions = [];
     let position;
     shipsZone.forEach(shipZone => {
         shipZone[1].forEach(pos => {
@@ -176,9 +176,24 @@ export const checkShipsIntersections = (shipPosConf, turn) => {
         });
     });
     let unique = [...new Set(positions)];
-    console.log(positions, positions.length, unique.length, turn);
-    positions.length === unique.length?
-    intersect = true : intersect = false;
+    // console.log(positions, positions.length, unique.length, turn);
+    if (unique.length === 7) {
+        let counter = 0;
+        unique.forEach(
+            el => {
+                el.split(':')
+                    .forEach(pos => {
+                        isNaN(Number(pos))?
+                        counter++ : counter;
+                        console.log(counter);
+                    });
+            });
+        if (counter === 0) {
+            alert('next Player');
+        }
+    }
+    positions.length === unique.length ?
+        intersect = true : intersect = false;
     return intersect;
 };
 
