@@ -10,7 +10,6 @@ import { clock, dt, et } from '../helpers/time';
 const setShips = document.querySelector('.turn-btn');
 let x, y;
 let choosenShip = null;
-let isTurned = null;
 let intersect, newShipPos, shipPosConf;
 let ismouseDown = false;
 let elTime = null;
@@ -23,6 +22,7 @@ export const ships = () => {
             gltfs[2].scene.name = 'smallShipOne';
             gltfs[3].scene.name = 'smallShipTwo';
             gltfs.forEach((gltf) => {
+                gltf.scene.turn = false;
                 gltf.scene.rotation.x = Math.PI / 2;
                 gltf.scene.rotation.y = Math.PI / 2;
                 if (gltf.scene.name === 'largeShip') {
@@ -66,8 +66,6 @@ export const chooseShip = () => {
     ismouseDown = true;
     intersect = shipsIntersect();
     if (intersect.length > 1) {
-        isTurned === null ?
-            isTurned = false : isTurned;
         choosenShip = intersect[0].object.parent.parent;
     }
 };
@@ -84,7 +82,6 @@ const getNewShipPpos = () => {
 };
 
 const setNewShipPos = () => {
-    ismouseDown = false;
     if (newShipPos && choosenShip) {
         if (
             choosenShip.name === 'largeShip' ||
@@ -98,7 +95,7 @@ const setNewShipPos = () => {
                 y = Math.round((-newShipPos.z) * 2) / 2 + 0.5 :
                 y = Math.round((-newShipPos.z) * 2) / 2;
         } else if (choosenShip.name === 'mediumShip') {
-            if (!isTurned) {
+            if (!choosenShip.turn) {
                 ((Math.round((newShipPos.x) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
                     x = Math.round((newShipPos.x) * 2) / 2 :
                     x = Math.round((newShipPos.x) * 2) / 2 - 0.5;
@@ -121,12 +118,15 @@ const setNewShipPos = () => {
                 y: y
             }
         };
-        console.log(checkShipsIntersections(shipPosConf, isTurned));
-        if (checkFieldBorders(choosenShip, x, y, isTurned)) {
+        if (
+            checkFieldBorders(choosenShip, x, y, choosenShip.turn) &&
+            checkShipsIntersections(shipPosConf, choosenShip.turn)
+        ) {
+            console.log('move', x, y);
             choosenShip.position.set(x, y, choosenShip.position.z);
         } else {
             choosenShip.rotation.set(Math.PI / 2, Math.PI / 2, 0);
-            isTurned = false;
+            choosenShip.turn = false;
             if (choosenShip.name === 'smallShipOne') {
                 choosenShip.position.set(
                     initialShipPos.smallOne.x,
@@ -157,27 +157,30 @@ const setNewShipPos = () => {
     choosenShip = null;
 };
 const turnShip = () => {
-    if (checkRotateEnable(choosenShip, x, y, isTurned)) {
-        isTurned ? isTurned = false : isTurned = true;
-        console.log(checkShipsIntersections(shipPosConf, isTurned));
-        if(!choosenShip) return;
+    if (checkRotateEnable(choosenShip, x, y, choosenShip.turn)) {
+        if (!choosenShip) return;
         if (choosenShip.name === 'mediumShip') {
-            if (isTurned) {
+            if (choosenShip.turn) {
                 choosenShip.rotation.y += Math.PI / 2;
-                x = choosenShip.position.x -= 0.5;
-                y = choosenShip.position.y += 0.5;
+                choosenShip.position.x -= 0.5;
+                choosenShip.position.y += 0.5;
+                choosenShip.turn = false;
             } else {
                 choosenShip.rotation.y -= Math.PI / 2;
-                x = choosenShip.position.x += 0.5;
-                y = choosenShip.position.y -= 0.5;
+                choosenShip.position.x += 0.5;
+                choosenShip.position.y -= 0.5;
+                choosenShip.turn = true;
             }
         } else {
-            if (isTurned) {
+            if (choosenShip.turn) {
                 choosenShip.rotation.y += Math.PI / 2;
+                choosenShip.turn = false;
             } else {
                 choosenShip.rotation.y -= Math.PI / 2;
+                choosenShip.turn = true;
             }
         }
+        setNewShipPos();
     }
 };
 const turnMoveToggle = () => {

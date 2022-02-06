@@ -69,15 +69,14 @@ export const checkRotateEnable = (choosenShip, x, y, isTurned) => {
         }
     } else if (choosenShip.name === 'mediumShip') {
         if (!isTurned) {
-            if (y <= 1.5) {
+            if (y >= -1.5) {
                 return true;
             }
         } else if (isTurned) {
-            if (x <= 1.5) {
+            if (x >= -1.5) {
                 return true;
             }
         }
-
     }
 
 };
@@ -141,12 +140,12 @@ export const checkShipsIntersections = (shipPosConf, turn) => {
                 curentShip,
                 [
                     addPos(
-                        shipPosConf.position.x - 0.5,
-                        shipPosConf.position.y
+                        shipPosConf.position.x ,
+                        shipPosConf.position.y +0.5
                     ),
                     addPos(
-                        shipPosConf.position.x - 0.5,
-                        shipPosConf.position.y + 1
+                        shipPosConf.position.x,
+                        shipPosConf.position.y - 0.5
                     )
                 ]];
     } else if (curentShip === 'smallShipOne') {
@@ -168,34 +167,18 @@ export const checkShipsIntersections = (shipPosConf, turn) => {
                 )
             ]];
     }
-    const prevPositions = [];
-    const curPositions = [];
-    let prevPos, curPos;
+    const positions = [];
+    let position;
     shipsZone.forEach(shipZone => {
         shipZone[1].forEach(pos => {
-            if (shipZone[0] === curentShip) {
-                curPos = `${pos.x}:${pos.y}`;
-                curPositions.push(curPos);
-            } else {
-                prevPos = `${pos.x}:${pos.y}`;
-                prevPositions.push(prevPos);
-            }
+            position = `${pos.x}:${pos.y}`;
+            positions.push(position);
         });
     });
-    curPositions.forEach(current => {
-        if (prevPositions.length === 0) {
-            intersect = true;
-        } else {
-            console.log(prevPos.includes(current));
-            if (!prevPos.includes(current)) {
-                intersect = true;
-            } else {
-                intersect = false;
-            }
-        }
-
-    });
-    console.log(curPositions, prevPositions, turn);
+    let unique = [...new Set(positions)];
+    console.log(positions, positions.length, unique.length, turn);
+    positions.length === unique.length?
+    intersect = true : intersect = false;
     return intersect;
 };
 
