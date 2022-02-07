@@ -1,81 +1,108 @@
-import {water, neWater} from '../view/waterGeometry';
-import {ground} from '../view/ground';
 import { TextureLoader } from 'three';
-import { checkFieldBorders, shoot, prevShots } from '../controller/gameController';
-import getPage from '../storage/getPage';
-import {shoots} from '../storage/gameStarage';
+import {firstGameWater, secondGameWater} from '../view/waterGeometry';
+import {firstGameGround, secondGameGround} from '../view/ground';
+import {getPlayer, setPlayer} from '../storage/player';
+import {getStage} from '../storage/stage';
+import { gameIntersect } from '../helpers/intersect';
 import { plane } from '../helpers/mesh/plane';
+import setedShipsPos from '../storage/setedShipsPos';
+//import {shoots} from '../storage/gameStarage';
 
-let player = null;
-let keyAble = false;
-
+let biasX, biasZ, intersect;
 const texture = new TextureLoader()
 .load('textures/buttons/aim.png');
 const aim = plane(1, 1, {map: texture});
 aim.position.set(0.5, 0.5, 0.01);
 
 export const gamePage = (scene) => {
-    player = 'first';
-    console.log('first player game');
-    // const playerTitile = document.querySelector('.player-title');
-    // playerTitile.textContent = 'Player 1 game';
     //ground
-    scene.add(ground);
-    console.log(ground);
+    scene.add(firstGameGround);
+    scene.add(secondGameGround);
     //water
-    scene.add(water);
+    scene.add(firstGameWater);
+    scene.add(secondGameWater);
     //aim
-    water.add(aim);
+    firstGameGround.add(aim);
 };
 
-const moveAim = (e) => {
-    if (checkFieldBorders(aim, e.code)) {
-        if (e.code === 'KeyD') {
-            aim.position.x = aim.position.x += 1;
-        } else if (e.code === 'KeyA') {
-            aim.position.x = aim.position.x -= 1;
-        } else if (e.code === 'KeyW') {
-            aim.position.y = aim.position.y += 1;
-        } else if (e.code === 'KeyS') {
-            aim.position.y = aim.position.y -= 1;
-        }
-    }
-    if (e.code === 'KeyE') {
-        if (shoot(aim.position, player)) {
-            if(player === 'first') {
-                shoots.firs.hit.push(aim.position);
-            } else {
-                shoots.second.hit.push(aim.position);
-            }
-            const redPlane = plane(0.9, 0.9, {
-                color: 0xff0000
-            });
-            ground.add(redPlane);
-            redPlane.position.x = aim.position.x;
-            redPlane.position.y = aim.position.y;
-            redPlane.position.z = aim.position.z;
-            console.log(ground);
+const findWaterIntersecnts = () => {
+    if(getStage() === 'game') {
+        if(getPlayer() === 'first') {
+            biasX = 0;
+            biasZ = 10;
         } else {
-            const whitePlane = plane(0.9, 0.9, {
-                color: 0xffffffff
-            });
-            whitePlane.position.x = aim.position.x;
-            whitePlane.position.y = aim.position.y;
-            whitePlane.position.z = aim.position.z;
-            ground.add(whitePlane);
-            // alert('мимо!!!')
-            // if(player === 'first') {
-            //     shoots.firs.miss.push(aim.position);
-            //     getPage('gameTwo');
-            // } else {
-            //     shoots.second.miss.push(aim.position);
-            //     getPage('gameOne');
-            // }
-            // ground.remove.apply(ground, ground.children);
-            // prevShots(player);
+            biasX = 10;
+            biasZ = 10;
         }
-        console.log(player, shoots);
+        console.log(setedShipsPos);
+        intersect = gameIntersect();
+        if(intersect.length > 0) {
+            console.log(intersect[0].point);
+        }
     }
 };
 
-document.addEventListener('keypress', moveAim);
+document.addEventListener('pointerdown', findWaterIntersecnts);
+
+
+
+
+
+
+
+
+
+
+
+
+// const moveAim = (e) => {
+//     if (checkFieldBorders(aim, e.code)) {
+//         if (e.code === 'KeyD') {
+//             aim.position.x = aim.position.x += 1;
+//         } else if (e.code === 'KeyA') {
+//             aim.position.x = aim.position.x -= 1;
+//         } else if (e.code === 'KeyW') {
+//             aim.position.y = aim.position.y += 1;
+//         } else if (e.code === 'KeyS') {
+//             aim.position.y = aim.position.y -= 1;
+//         }
+//     }
+//     if (e.code === 'KeyE') {
+//         if (shoot(aim.position, player)) {
+//             if(player === 'first') {
+//                 shoots.firs.hit.push(aim.position);
+//             } else {
+//                 shoots.second.hit.push(aim.position);
+//             }
+//             const redPlane = plane(0.9, 0.9, {
+//                 color: 0xff0000
+//             });
+//             firstSetGround.add(redPlane);
+//             redPlane.position.x = aim.position.x;
+//             redPlane.position.y = aim.position.y;
+//             redPlane.position.z = aim.position.z;
+//             console.log(firstSetGround);
+//         } else {
+//             const whitePlane = plane(0.9, 0.9, {
+//                 color: 0xffffffff
+//             });
+//             whitePlane.position.x = aim.position.x;
+//             whitePlane.position.y = aim.position.y;
+//             whitePlane.position.z = aim.position.z;
+//             firstSetGround.add(whitePlane);
+//             // alert('мимо!!!')
+//             // if(player === 'first') {
+//             //     shoots.firs.miss.push(aim.position);
+//             //     getPage('gameTwo');
+//             // } else {
+//             //     shoots.second.miss.push(aim.position);
+//             //     getPage('gameOne');
+//             // }
+//             // ground.remove.apply(ground, ground.children);
+//             // prevShots(player);
+//         }
+//         console.log(player, shoots);
+//     }
+// };
+
+// document.addEventListener('keypress', moveAim);

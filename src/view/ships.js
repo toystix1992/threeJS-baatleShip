@@ -1,11 +1,11 @@
 import getGLTFModel from '../helpers/loaders/gltfLoader';
-import { water, newWater } from './waterGeometry';
+import { firstSetWater, secondSetWater } from './waterGeometry';
 import { shipsIntersect } from '../helpers/intersect';
 import { checkShipsIntersections, checkFieldBorders, checkRotateEnable }
     from '../controller/shipController';
 import { initialShipPos } from '../config/config';
 import { getPlayer, setPlayer } from '../storage/player';
-import { clock, dt, et } from '../helpers/time';
+import { clock } from '../helpers/time';
 
 let x, y;
 let choosenShip = null;
@@ -55,17 +55,18 @@ export const ships = () => {
                     }
                 }
                 const cloneShips = gltf.scene.clone();
-                water.add(gltf.scene);
-                newWater.add(cloneShips);
+                firstSetWater.add(gltf.scene);
+                secondSetWater.add(cloneShips);
             });
         });
 };
-export const chooseShip = () => {
+const chooseShip = () => {
     getPlayer() === 'first'?
         bias = 0 : bias = 15;
     clock.start();
     ismouseDown = true;
     intersect = shipsIntersect();
+    console.log(intersect);
     if (intersect.length > 1) {
         choosenShip = intersect[0].object.parent.parent;
     }
@@ -81,7 +82,6 @@ const getNewShipPos = () => {
         );
     }
 };
-
 const setNewShipPos = () => {
     if (newShipPos && choosenShip) {
         if (
@@ -201,7 +201,11 @@ const turnMoveToggle = () => {
         turnShip() : setNewShipPos();
     choosenShip = null;
 };
-
+export const disableShipsIntersects = () => {
+    document.removeEventListener('pointerdown', chooseShip);
+    document.removeEventListener('pointermove', getNewShipPos);
+    document.removeEventListener('pointerup', turnMoveToggle);
+}
 
 document.addEventListener('pointerdown', chooseShip);
 document.addEventListener('pointermove', getNewShipPos);

@@ -27,7 +27,7 @@ const groundMaterial = new MeshStandardMaterial({
   roughness: 0.8,
   metalness: 0.4,
 });
-export const ground = new Mesh(groundGeometry, groundMaterial);
+export const firstSetGround = new Mesh(groundGeometry, groundMaterial);
 const textureLoader = new TextureLoader(loadingManager);
 
 textureLoader.load("textures/fieldTexture.jpg", (map) => {
@@ -38,9 +38,12 @@ textureLoader.load("textures/fieldTexture.jpg", (map) => {
   groundMaterial.map = map;
   groundMaterial.needsUpdate = true;
 });
-ground.rotation.x = Math.PI * - 0.5;
+firstSetGround.rotation.x = Math.PI * - 0.5;
 
-export const newGround = ground.clone();
-newGround.position.x = 15;
-
-
+export const secondSetGround = firstSetGround.clone();
+secondSetGround.position.x = 15;
+export const firstGameGround = firstSetGround.clone();
+firstGameGround.position.z = 10;
+export const secondGameGround = firstSetGround.clone();
+secondGameGround.position.z = 10;
+secondGameGround.position.x = 15;

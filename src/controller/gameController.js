@@ -1,7 +1,7 @@
 import setedShipsPos from '../storage/setedShipsPos';
 import { plane } from '../helpers/mesh/plane';
 import {shoots} from '../storage/gameStarage';
-import {ground} from '../view/ground';
+import {firstSetGround} from '../view/ground';
 
 
 export const checkFieldBorders = (aim, keyCode) => {
@@ -67,7 +67,7 @@ export const prevShots = (player) => {
             redPlane.position.x = pos.x;
             redPlane.position.y = pos.y;
             redPlane.position.z = pos.z;
-            ground.add(redPlane);
+            firstSetGround.add(redPlane);
         });
         shoots.firs.miss.forEach(pos => {
             const whitePlane = plane(0.9, 0.9, {
@@ -76,14 +76,14 @@ export const prevShots = (player) => {
             whitePlane.position.x = pos.x;
             whitePlane.position.y = pos.y;
             whitePlane.position.z = pos.z;
-            ground.add(whitePlane);
+            firstSetGround.add(whitePlane);
         });
     } else if (player === 'second') {
         shoots.second.hit.forEach(pos => {
             const redPlane = plane(0.9, 0.9, {
                 color: 0xff0000
             });
-            ground.add(redPlane);
+            firstSetGround.add(redPlane);
             redPlane.position.x = pos.x;
             redPlane.position.y = pos.y;
             redPlane.position.z = pos.z;
@@ -95,7 +95,7 @@ export const prevShots = (player) => {
             whitePlane.position.x = pos.x;
             whitePlane.position.y = pos.y;
             whitePlane.position.z = pos.z;
-            ground.add(whitePlane);
+            firstSetGround.add(whitePlane);
         });
     }
 }

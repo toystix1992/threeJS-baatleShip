@@ -1,10 +1,12 @@
 import {Color} from 'three';
 import {showSetShipsBtn} from '../view/setShipBtn';
 import {plane} from '../helpers/mesh/plane';
-import {water, newWater} from '../view/waterGeometry';
+import {firstSetWater, secondSetWater} from '../view/waterGeometry';
 import {getPlayer, setPlayer} from '../storage/player';
+import {setStage} from '../storage/stage';
 import setedShipsPos from '../storage/setedShipsPos';
 import camera from '../helpers/initial/camera';
+import {disableShipsIntersects} from '../view/ships';
 import gsap from 'gsap';
 
 const body = document.querySelector('body');
@@ -221,22 +223,30 @@ const navigateShipZone = async () => {
             {delay: 1, duration: 2, ease: "elastic", x: 15});
         await tween.play();
         showSetShipsBtn(setShips);
-        // water.remove.apply(water, water.children);
-        // tween.reverse();
+    } else {
+        disableShipsIntersects();
+        setShips.classList.add('hidden');
+        tween = gsap.to(camera.position,
+            {delay: 1, duration: 2, ease: "elastic", x: 0, z: 14});
+        await tween.play();
+        setStage('game');
     }
 }
 
 const onSetShipsSetBtn = async () => {
     if (getPlayer() === 'first') {
-        curWater = water;
+        curWater = firstSetWater;
         setedShipsPos.firstPlayer = shipsZone;
+        lightShipZone();
+        await navigateShipZone();
+        setPlayer('second');
     } else {
-        curWater = newWater;
+        curWater = secondSetWater;
         setedShipsPos.secondPlayer = shipsZone;
+        lightShipZone();
+        await navigateShipZone();
+        setPlayer('first');
     }
-    lightShipZone();
-    await navigateShipZone();
-    setPlayer('second');
     console.log(playerTitle);
     addDiscription(getPlayer());
     shipsZone = [];

@@ -22,9 +22,7 @@ const getWater = (xPos, zPos) => {
     water.rotation.x = Math.PI * - 0.5;
     return water;
 };
-export const water = getWater(0, 0);
-export const newWater = getWater(15, 0);
-// export const newWater = getWater(0, 15);
-// export const newWater = getWater(15, 15);
-
-
+export const firstSetWater = getWater(0, 0);
+export const secondSetWater = getWater(15, 0);
+export const firstGameWater = getWater(0, 10);
+export const secondGameWater = getWater(15, 10);

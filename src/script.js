@@ -5,22 +5,19 @@ import light from './helpers/initial/light';
 import renderer from './helpers/initial/renderer';
 import resize from './helpers/resize';
 import getPage from './storage/getPage';
-import { getPropertyFromStorage, removePropertyFromStorage, setPropertyToStorage } from "./helpers/localStorage";
-import { loadingScreen, animateLoadingScreen } from './components/loadingScreen';
-import { mousePosition } from './helpers/mousePosition';
+import {getPropertyFromStorage, removePropertyFromStorage, setPropertyToStorage} from "./helpers/localStorage";
+import {loadingScreen, animateLoadingScreen} from './components/loadingScreen';
+import {mousePosition} from './helpers/mousePosition';
 
 const loadingText = document.querySelector('.loading');
-export let page;
-
 const init = () => {
-    //Loading scrin
+    //Loading screen
     loadingScreen();
     //choose  page
     getPage('setting');
     //Light
     light(scene);
 };
-
 //Resize
 const onWindowResize = () => {
     resize(camera, renderer);

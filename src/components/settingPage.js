@@ -1,14 +1,14 @@
-import {water, newWater} from '../view/waterGeometry';
-import {ground, newGround} from '../view/ground';
+import {firstSetWater, secondSetWater} from '../view/waterGeometry';
+import {firstSetGround, secondSetGround} from '../view/ground';
 import {ships} from '../view/ships';
 
 export const settingPage = (scene) => {
     //first player
-    scene.add(ground);
-    scene.add(newGround);
+    scene.add(firstSetGround);
+    scene.add(secondSetGround);
     //second player
-    scene.add(water);
-    scene.add(newWater);
+    scene.add(firstSetWater);
+    scene.add(secondSetWater);
     //model
     ships();
 };
