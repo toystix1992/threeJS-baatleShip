@@ -7,7 +7,7 @@ const params = {
     flowX: 1,
     flowY: 1
 };
-const getWater = (xPos) => {
+const getWater = (xPos, zPos) => {
     const waterGeometry = new PlaneGeometry(6, 6);
     const water = new Water(waterGeometry, {
         color: params.color,
@@ -18,10 +18,13 @@ const getWater = (xPos) => {
     });
     water.position.y = 0.5;
     water.position.x = xPos;
+    water.position.z = zPos;
     water.rotation.x = Math.PI * - 0.5;
     return water;
 };
-export const water = getWater(0);
-export const newWater = getWater(15);
+export const water = getWater(0, 0);
+export const newWater = getWater(15, 0);
+// export const newWater = getWater(0, 15);
+// export const newWater = getWater(15, 15);
 
 

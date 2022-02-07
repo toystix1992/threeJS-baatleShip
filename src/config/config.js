@@ -1,5 +1,5 @@
 export const perspectiveCamera = {
-    fov: 45,
+    fov: 35,
     near: 0.1,
     far: 70,
     pos: {x:0, y:10, z:5}

@@ -5,5 +5,4 @@ const scene = new Scene();
 scene.background = skybox;
 const axesHelper = new AxesHelper( 5 );
 scene.add( axesHelper );
-console.log(scene);
 export default scene;

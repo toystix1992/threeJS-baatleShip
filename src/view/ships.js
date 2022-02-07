@@ -7,10 +7,9 @@ import { initialShipPos } from '../config/config';
 import { getPlayer, setPlayer } from '../storage/player';
 import { clock, dt, et } from '../helpers/time';
 
-const setShips = document.querySelector('.turn-btn');
 let x, y;
 let choosenShip = null;
-let intersect, newShipPos, shipPosConf;
+let intersect, newShipPos, shipPosConf, bias;
 let ismouseDown = false;
 let elTime = null;
 
@@ -62,6 +61,8 @@ export const ships = () => {
         });
 };
 export const chooseShip = () => {
+    getPlayer() === 'first'?
+        bias = 0 : bias = 15;
     clock.start();
     ismouseDown = true;
     intersect = shipsIntersect();
@@ -69,12 +70,12 @@ export const chooseShip = () => {
         choosenShip = intersect[0].object.parent.parent;
     }
 };
-const getNewShipPpos = () => {
+const getNewShipPos = () => {
     intersect = shipsIntersect();
     if (intersect.length === 1 && ismouseDown && choosenShip) {
         newShipPos = intersect[0].point;
         choosenShip.position.set(
-            newShipPos.x,
+            newShipPos.x - bias,
             -newShipPos.z,
             choosenShip.position.z
         );
@@ -88,24 +89,24 @@ const setNewShipPos = () => {
             choosenShip.name === 'smallShipOne' ||
             choosenShip.name === 'smallShipTwo'
         ) {
-            ((Math.round((newShipPos.x) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
-                x = Math.round((newShipPos.x) * 2) / 2 - 0.5 :
-                x = Math.round((newShipPos.x) * 2) / 2;
+            ((Math.round((newShipPos.x - bias) * 2) / 2) ^ 0) === Math.round((newShipPos.x- bias) * 2) / 2 ?
+                x = Math.round((newShipPos.x- bias) * 2) / 2 - 0.5 :
+                x = Math.round((newShipPos.x- bias) * 2) / 2;
             ((Math.round((newShipPos.z) * 2) / 2) ^ 0) === Math.round((newShipPos.z) * 2) / 2 ?
                 y = Math.round((-newShipPos.z) * 2) / 2 + 0.5 :
                 y = Math.round((-newShipPos.z) * 2) / 2;
         } else if (choosenShip.name === 'mediumShip') {
             if (!choosenShip.turn) {
-                ((Math.round((newShipPos.x) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
-                    x = Math.round((newShipPos.x) * 2) / 2 :
-                    x = Math.round((newShipPos.x) * 2) / 2 - 0.5;
+                ((Math.round((newShipPos.x- bias) * 2) / 2) ^ 0) === Math.round((newShipPos.x- bias) * 2) / 2 ?
+                    x = Math.round((newShipPos.x- bias) * 2) / 2 :
+                    x = Math.round((newShipPos.x- bias) * 2) / 2 - 0.5;
                 ((Math.round((newShipPos.z) * 2) / 2) ^ 0) === Math.round((newShipPos.z) * 2) / 2 ?
                     y = Math.round((-newShipPos.z) * 2) / 2 + 0.5 :
                     y = Math.round((-newShipPos.z) * 2) / 2;
             } else {
-                ((Math.round((newShipPos.x) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
-                    x = Math.round((newShipPos.x) * 2) / 2 - 0.5 :
-                    x = Math.round((newShipPos.x) * 2) / 2;
+                ((Math.round((newShipPos.x- bias) * 2) / 2) ^ 0) === Math.round((newShipPos.x) * 2) / 2 ?
+                    x = Math.round((newShipPos.x- bias) * 2) / 2 - 0.5 :
+                    x = Math.round((newShipPos.x- bias) * 2) / 2;
                 ((Math.round((newShipPos.z) * 2) / 2) ^ 0) === Math.round((newShipPos.z) * 2) / 2 ?
                     y = Math.round((-newShipPos.z) * 2) / 2 :
                     y = Math.round((-newShipPos.z) * 2) / 2 + 0.5;
@@ -166,6 +167,7 @@ const setNewShipPos = () => {
     choosenShip = null;
 };
 const turnShip = () => {
+    if(!choosenShip) return;
     if (checkRotateEnable(choosenShip, x, y, choosenShip.turn)) {
         if (!choosenShip) return;
         if (choosenShip.name === 'mediumShip') {
@@ -200,7 +202,8 @@ const turnMoveToggle = () => {
     choosenShip = null;
 };
 
+
 document.addEventListener('pointerdown', chooseShip);
-document.addEventListener('pointermove', getNewShipPpos);
+document.addEventListener('pointermove', getNewShipPos);
 document.addEventListener('pointerup', turnMoveToggle);
 

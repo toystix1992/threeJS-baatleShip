@@ -1,20 +1,28 @@
-import scene from "../helpers/initial/scene";
-import { Color } from 'three';
-import { water, newWater } from '../view/waterGeometry';
-import { plane } from '../helpers/mesh/plane';
+import {Color} from 'three';
+import {showSetShipsBtn} from '../view/setShipBtn';
+import {plane} from '../helpers/mesh/plane';
+import {water, newWater} from '../view/waterGeometry';
+import {getPlayer, setPlayer} from '../storage/player';
 import setedShipsPos from '../storage/setedShipsPos';
-import getPage from '../storage/getPage';
+import camera from '../helpers/initial/camera';
 import gsap from 'gsap';
 
+const body = document.querySelector('body');
+const playerTitle = document.querySelector('.player-title');
+const setShips = document.querySelector('.set-btn');
 let shipsZone = [];
-let curentShip;
-let player = 1;
+let curentShip, curWater, intersect;
 const config = {
     color: new Color('green'),
     opacity: 0.1,
     transparent: true
 };
 
+const addDiscription = (PlayerNumber) => {
+    const element = `<h1 class="player-title"> ${PlayerNumber} player set ships!</h1>`;
+    body.insertAdjacentHTML( 'beforeend', element );
+};
+addDiscription(getPlayer());
 export const checkFieldBorders = (choosenShip, x, y, isTurned) => {
     if (
         choosenShip.name === 'smallShipOne' ||
@@ -88,7 +96,6 @@ const addPos = (x, y) => {
     };
 };
 export const checkShipsIntersections = (shipPosConf, turn) => {
-    let intersect = null;
     curentShip = shipPosConf.name;
     if (curentShip === 'largeShip') {
         !turn ?
@@ -137,17 +144,17 @@ export const checkShipsIntersections = (shipPosConf, turn) => {
                     shipPosConf.position.y
                 )
             ]] : shipsZone[1] = [
-                curentShip,
-                [
-                    addPos(
-                        shipPosConf.position.x,
-                        shipPosConf.position.y + 0.5
-                    ),
-                    addPos(
-                        shipPosConf.position.x,
-                        shipPosConf.position.y - 0.5
-                    )
-                ]];
+            curentShip,
+            [
+                addPos(
+                    shipPosConf.position.x,
+                    shipPosConf.position.y + 0.5
+                ),
+                addPos(
+                    shipPosConf.position.x,
+                    shipPosConf.position.y - 0.5
+                )
+            ]];
     } else if (curentShip === 'smallShipOne') {
         shipsZone[2] = [
             curentShip,
@@ -183,13 +190,13 @@ export const checkShipsIntersections = (shipPosConf, turn) => {
             el => {
                 el.split(':')
                     .forEach(pos => {
-                        isNaN(Number(pos))?
-                        counter++ : counter;
-                        console.log(counter);
+                        isNaN(Number(pos)) ?
+                            counter++ : counter;
+                        // console.log(counter);
                     });
             });
         if (counter === 0) {
-            alert('next Player');
+            showSetShipsBtn(setShips);
         }
     }
     positions.length === unique.length ?
@@ -197,46 +204,46 @@ export const checkShipsIntersections = (shipPosConf, turn) => {
     return intersect;
 };
 
+const lightShipZone = () => {
+    shipsZone.forEach(shipsZone => {
+        shipsZone[1].forEach(pos => {
+            const shipLight = plane(1, 1, config);
+            shipLight.position.set(pos.x, pos.y, pos.z);
+            curWater.add(shipLight);
+        });
+    })
+};
+
+const navigateShipZone = async () => {
+    let tween
+    if (getPlayer() === 'first') {
+        tween = gsap.to(camera.position,
+            {delay: 1, duration: 2, ease: "elastic", x: 15});
+        await tween.play();
+        showSetShipsBtn(setShips);
+        // water.remove.apply(water, water.children);
+        // tween.reverse();
+    }
+}
+
+const onSetShipsSetBtn = async () => {
+    if (getPlayer() === 'first') {
+        curWater = water;
+        setedShipsPos.firstPlayer = shipsZone;
+    } else {
+        curWater = newWater;
+        setedShipsPos.secondPlayer = shipsZone;
+    }
+    lightShipZone();
+    await navigateShipZone();
+    setPlayer('second');
+    console.log(playerTitle);
+    addDiscription(getPlayer());
+    shipsZone = [];
+    console.log(setedShipsPos, getPlayer());
+}
 
 
+setShips.addEventListener('click', onSetShipsSetBtn);
 
-
-
-
-
-
-
-
-
-
-
-// const lightShipZone = () => {
-//     shipZone[1].forEach(pos => {
-//         const shipLight = plane(1, 1, config);
-//         shipLight.position.set(pos.x, pos.y, pos.z);
-//         water.add(shipLight);
-//     });
-//     navigateShipZone();
-// };
-
-// const navigateShipZone = async () => {
-//     let tween
-//     if (shipsZone.length === 4 && player === 1) {
-//         tween = gsap.to(scene.position, { duration: 1, ease: "elastic", x: 7 });
-//         setedShipsPos.firstPlayer = shipsZone;
-//         shipsZone = [];
-//         player = 2;
-//         await tween.play();
-//         water.remove.apply(water, water.children);
-//         getPage('settingTwo');
-//         tween.reverse();
-//     } else if (shipsZone.length === 4 && player === 2) {
-//         setedShipsPos.secondPlayer = shipsZone;
-//         console.log(setedShipsPos);
-//         shipsZone = [];
-//         player = 2;
-//         water.remove.apply(water, water.children);
-//         getPage('gameOne');
-//     }
-// }
 

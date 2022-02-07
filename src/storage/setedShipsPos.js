@@ -1,6 +1,6 @@
 const setedShipsPos = {
-    firstPlayer: [],
-    secondPlayer: []
+    firstPlayer: null,
+    secondPlayer: null
 };
 
 export default setedShipsPos;
