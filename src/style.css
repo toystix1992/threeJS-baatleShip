@@ -31,7 +31,7 @@ body {
   position: absolute;
   left: 40%;
   top: 5%;
-  color: rgba(127, 181, 228, 0.486);
+  color: white;
   font-size: 48px;
   font-style: italic;
 }
@@ -52,4 +52,20 @@ body {
 }
 .set-btn:active {
   box-shadow: none;
+}
+.ships-counter-one, .ships-counter-two {
+  position: absolute;
+  top: 20vh;
+  left: 5%;
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  color: white;
+}
+.counter-hide {
+  position: absolute;
+  top: 20vh;
+  left: -15%;
 }

@@ -66,7 +66,6 @@ const chooseShip = () => {
     clock.start();
     ismouseDown = true;
     intersect = shipsIntersect();
-    console.log(intersect);
     if (intersect.length > 1) {
         choosenShip = intersect[0].object.parent.parent;
     }

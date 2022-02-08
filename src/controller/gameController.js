@@ -1,101 +1,50 @@
 import setedShipsPos from '../storage/setedShipsPos';
-import { plane } from '../helpers/mesh/plane';
+import {plane} from '../helpers/mesh/plane';
 import {shoots} from '../storage/gameStarage';
-import {firstSetGround} from '../view/ground';
+import {firstGameGround, secondGameGround} from '../view/ground';
 
+export const planesPos = [];
+let x = -3.5;
+let y = 2.5;
 
-export const checkFieldBorders = (aim, keyCode) => {
-    if (keyCode === 'KeyD') {
-        if (aim.position.x > 1.5) {
-            return false;
-        } else {
-            return true;
-        }
-    } else if (keyCode === 'KeyA') {
-        if (aim.position.x < -1.5) {
-            return false;
-        } else {
-            return true;
-        }
-    } else if (keyCode === 'KeyW') {
-        if (aim.position.y > 1.5) {
-            return false;
-        } else {
-            return true;
-        }
-    } else if (keyCode === 'KeyS') {
-        if (aim.position.y < -1.5) {
-            return false;
-        } else {
-            return true;
-        }
+for (let i = 0; i < 36; i++) {
+    if (x < 2.5) {
+        x += 1;
+    } else {
+        x = -2.5;
+        y -= 1;
     }
-};
-
-export const shoot = (shootPos, player) => {
-    let isHit = false;
-    const shoot = `${shootPos.x}:${shootPos.y}`;
-    if (player === 'first') {
-        setedShipsPos.secondPlayer.forEach(ship => {
-            const shipsPos = [];
-            ship[1].forEach(shipPos => shipsPos.push(`${shipPos.x}:${shipPos.y}`));
-            if (shipsPos.includes(shoot)) {
-                // console.log(ship[0], 'hit', shootPos);
-                isHit = true;
-            }
-        });
-    } else if (player === 'second') {
-        setedShipsPos.firstPlayer.forEach(ship => {
-            const shipsPos = [];
-            ship[1].forEach(shipPos => shipsPos.push(`${shipPos.x}:${shipPos.y}`));
-            if (shipsPos.includes(shoot)) {
-                console.log(ship[0], 'hit', shootPos);
-                isHit = true;
-            }
-        });
+    const pos = {
+        x: x,
+        y: y,
+        z: 0.01
     }
-    return isHit;
-};
-
-export const prevShots = (player) => {
-    console.log(shoots, player);
-    if (player === 'first') {
-        shoots.firs.hit.forEach(pos => {
-            const redPlane = plane(0.9, 0.9, {
-                color: 0xff0000
-            });
-            redPlane.position.x = pos.x;
-            redPlane.position.y = pos.y;
-            redPlane.position.z = pos.z;
-            firstSetGround.add(redPlane);
-        });
-        shoots.firs.miss.forEach(pos => {
-            const whitePlane = plane(0.9, 0.9, {
-                color: 0xffffffff
-            });
-            whitePlane.position.x = pos.x;
-            whitePlane.position.y = pos.y;
-            whitePlane.position.z = pos.z;
-            firstSetGround.add(whitePlane);
-        });
-    } else if (player === 'second') {
-        shoots.second.hit.forEach(pos => {
-            const redPlane = plane(0.9, 0.9, {
-                color: 0xff0000
-            });
-            firstSetGround.add(redPlane);
-            redPlane.position.x = pos.x;
-            redPlane.position.y = pos.y;
-            redPlane.position.z = pos.z;
-        });
-        shoots.second.miss.forEach(pos => {
-            const whitePlane = plane(0.9, 0.9, {
-                color: 0xffffffff
-            });
-            whitePlane.position.x = pos.x;
-            whitePlane.position.y = pos.y;
-            whitePlane.position.z = pos.z;
-            firstSetGround.add(whitePlane);
-        });
-    }
+    planesPos.push(pos);
 }
+
+planesPos.forEach((pos, idx) => {
+    const newPlaneOne = plane(0.9, 0.9, {
+        color: 0x0000FF,
+        opacity: 0,
+        transparent: true
+    });
+    const newPlaneTwo = plane(0.9, 0.9, {
+        color: 0x0000FF,
+        opacity: 0,
+        transparent: true
+    });
+    newPlaneOne.name = `${idx}`;
+    newPlaneOne.position.set(
+        pos.x,
+        pos.y,
+        pos.z
+    );
+    newPlaneTwo.name = `${idx}`;
+    newPlaneTwo.position.set(
+        pos.x,
+        pos.y,
+        pos.z
+    );
+    firstGameGround.add(newPlaneOne);
+    secondGameGround.add(newPlaneTwo);
+});

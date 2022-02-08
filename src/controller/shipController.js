@@ -8,12 +8,14 @@ import setedShipsPos from '../storage/setedShipsPos';
 import camera from '../helpers/initial/camera';
 import {disableShipsIntersects} from '../view/ships';
 import gsap from 'gsap';
+import {getShipsInGame} from '../components/gamePage';
 
 const body = document.querySelector('body');
 const playerTitle = document.querySelector('.player-title');
 const setShips = document.querySelector('.set-btn');
 let shipsZone = [];
 let curentShip, curWater, intersect;
+export let permissionShipsData = null;
 const config = {
     color: new Color('green'),
     opacity: 0.1,
@@ -246,13 +248,11 @@ const onSetShipsSetBtn = async () => {
         lightShipZone();
         await navigateShipZone();
         setPlayer('first');
+        getShipsInGame();
     }
-    console.log(playerTitle);
     addDiscription(getPlayer());
     shipsZone = [];
-    console.log(setedShipsPos, getPlayer());
 }
-
 
 setShips.addEventListener('click', onSetShipsSetBtn);
 

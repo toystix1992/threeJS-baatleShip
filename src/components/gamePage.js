@@ -1,48 +1,86 @@
-import { TextureLoader } from 'three';
 import {firstGameWater, secondGameWater} from '../view/waterGeometry';
 import {firstGameGround, secondGameGround} from '../view/ground';
 import {getPlayer, setPlayer} from '../storage/player';
 import {getStage} from '../storage/stage';
-import { gameIntersect } from '../helpers/intersect';
-import { plane } from '../helpers/mesh/plane';
+import {gameIntersect} from '../helpers/intersect';
+import {plane} from '../helpers/mesh/plane';
+import {planesPos} from '../controller/gameController';
 import setedShipsPos from '../storage/setedShipsPos';
 //import {shoots} from '../storage/gameStarage';
+// import {TextureLoader} from 'three';
 
-let biasX, biasZ, intersect;
-const texture = new TextureLoader()
-.load('textures/buttons/aim.png');
-const aim = plane(1, 1, {map: texture});
-aim.position.set(0.5, 0.5, 0.01);
-
+const shipsCounterOne = document.querySelector('.ships-counter-one');
+const shipsCounterTwo = document.querySelector('.ships-counter-two');
+let intersect;
+const bias = {
+    playerOne: {
+        biasX: 0,
+        biasZ: 10
+    },
+    playerTwo: {
+        biasX: 10,
+        biasZ: 10
+    }
+}
 export const gamePage = (scene) => {
-    //ground
     scene.add(firstGameGround);
     scene.add(secondGameGround);
-    //water
     scene.add(firstGameWater);
     scene.add(secondGameWater);
-    //aim
-    firstGameGround.add(aim);
+    // firstGameGround.add(aim);
 };
 
-const findWaterIntersecnts = () => {
-    if(getStage() === 'game') {
-        if(getPlayer() === 'first') {
-            biasX = 0;
-            biasZ = 10;
+export const getShipsInGame = () => {
+    setedShipsPos.secondPlayer.forEach(ship => {
+        ship[1].forEach((pos,idx) => {
+            const redPlane = plane(0.9, 0.9, {
+                color: 0xff0000,
+                opacity: 0,
+                transparent: true
+            });
+            redPlane.name = `${ship[0]}${idx}`;
+            redPlane.position.set(
+                pos.x,
+                pos.y,
+                pos.z + 0.1
+            );
+            firstGameGround.add(redPlane);
+        });
+    });
+    setedShipsPos.firstPlayer.forEach(ship => {
+        ship[1].forEach(pos => {
+            const redPlane = plane(0.9, 0.9, {
+                color: 0xff0000,
+                opacity: 0,
+                transparent: true
+            });
+            redPlane.name = ship[0];
+            redPlane.position.set(
+                pos.x,
+                pos.y,
+                pos.z +0.1
+            );
+            secondGameGround.add(redPlane);
+        });
+    });
+}
+const findGroundIntersecnts = () => {
+    if (getStage() === 'game') {
+        if (getPlayer() === 'first') {
+            shipsCounterOne.classList.remove('counter-hide');
         } else {
-            biasX = 10;
-            biasZ = 10;
+            shipsCounterOne.classList.add('counter-hide');
         }
-        console.log(setedShipsPos);
         intersect = gameIntersect();
-        if(intersect.length > 0) {
-            console.log(intersect[0].point);
+        if (intersect.length > 0) {
+            // console.log(intersect[0].object.material.opacity);
+            console.log(intersect[0].object.name);
+            intersect[0].object.material.opacity = 1;
         }
     }
 };
 
-document.addEventListener('pointerdown', findWaterIntersecnts);
+document.addEventListener('pointerdown', findGroundIntersecnts);
 
 
 
@@ -51,6 +89,17 @@ document.addEventListener('pointerdown', findWaterIntersecnts);
 
 
 
+
+
+
+
+
+
+
+// const texture = new TextureLoader()
+// .load('textures/buttons/aim.png');
+// const aim = plane(1, 1, {map: texture});
+// aim.position.set(0.5, 0.5, 0.01);
 
 
 
