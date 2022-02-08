@@ -4,7 +4,7 @@ import {getPlayer, setPlayer} from '../storage/player';
 import {getStage} from '../storage/stage';
 import {gameIntersect} from '../helpers/intersect';
 import {plane} from '../helpers/mesh/plane';
-import {planesPos} from '../controller/gameController';
+import {navigateGameZone} from '../controller/gameController';
 import setedShipsPos from '../storage/setedShipsPos';
 //import {shoots} from '../storage/gameStarage';
 // import {TextureLoader} from 'three';
@@ -12,6 +12,7 @@ import setedShipsPos from '../storage/setedShipsPos';
 const shipsCounterOne = document.querySelector('.ships-counter-one');
 const shipsCounterTwo = document.querySelector('.ships-counter-two');
 let intersect;
+let isClickEnable = true;
 const bias = {
     playerOne: {
         biasX: 0,
@@ -29,7 +30,6 @@ export const gamePage = (scene) => {
     scene.add(secondGameWater);
     // firstGameGround.add(aim);
 };
-
 export const getShipsInGame = () => {
     setedShipsPos.secondPlayer.forEach(ship => {
         ship[1].forEach((pos,idx) => {
@@ -63,19 +63,26 @@ export const getShipsInGame = () => {
             secondGameGround.add(redPlane);
         });
     });
-}
-const findGroundIntersecnts = () => {
+};
+const findGroundIntersecnts = async () => {
     if (getStage() === 'game') {
         if (getPlayer() === 'first') {
             shipsCounterOne.classList.remove('counter-hide');
+            shipsCounterTwo.classList.add('counter-hide');
         } else {
+            shipsCounterTwo.classList.remove('counter-hide');
             shipsCounterOne.classList.add('counter-hide');
         }
         intersect = gameIntersect();
-        if (intersect.length > 0) {
-            // console.log(intersect[0].object.material.opacity);
-            console.log(intersect[0].object.name);
+        if (intersect.length > 0 && !intersect[0].object.isClicked && isClickEnable) {
+            intersect[0].object.isClicked = true;
             intersect[0].object.material.opacity = 1;
+            if(intersect[0].object.name.length < 3) {
+                isClickEnable = false;
+                console.log(intersect[0].object.name);
+                await navigateGameZone();
+                isClickEnable = true;
+            }
         }
     }
 };

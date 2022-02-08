@@ -1,7 +1,12 @@
 import setedShipsPos from '../storage/setedShipsPos';
 import {plane} from '../helpers/mesh/plane';
-import {shoots} from '../storage/gameStarage';
 import {firstGameGround, secondGameGround} from '../view/ground';
+import {getPlayer, setPlayer} from "../storage/player";
+import gsap from "gsap";
+import camera from "../helpers/initial/camera";
+import {showSetShipsBtn} from "../view/setShipBtn";
+import {disableShipsIntersects} from "../view/ships";
+import {setStage} from "../storage/stage";
 
 export const planesPos = [];
 let x = -3.5;
@@ -34,12 +39,14 @@ planesPos.forEach((pos, idx) => {
         transparent: true
     });
     newPlaneOne.name = `${idx}`;
+    newPlaneOne.isClicked = false;
     newPlaneOne.position.set(
         pos.x,
         pos.y,
         pos.z
     );
     newPlaneTwo.name = `${idx}`;
+    newPlaneTwo.isClicked = false;
     newPlaneTwo.position.set(
         pos.x,
         pos.y,
@@ -48,3 +55,20 @@ planesPos.forEach((pos, idx) => {
     firstGameGround.add(newPlaneOne);
     secondGameGround.add(newPlaneTwo);
 });
+
+
+export const navigateGameZone = async () => {
+    let tween
+    if (getPlayer() === 'first') {
+        tween = gsap.to(camera.position,
+            {delay: 1, duration: 2, ease: "elastic", x: 15});
+        await tween.play();
+        setPlayer('second');
+    } else {
+        disableShipsIntersects();
+        tween = gsap.to(camera.position,
+            {delay: 1, duration: 2, ease: "elastic", x: 0});
+        await tween.play();
+        setPlayer('first');
+    }
+}
