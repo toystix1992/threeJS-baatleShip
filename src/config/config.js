@@ -1,7 +1,7 @@
 export const perspectiveCamera = {
-    fov: 35,
-    near: 0.1,
-    far: 70,
+    fov: 70/(window.innerWidth / window.innerHeight + 0.2),
+    near: 1,
+    far: 100,
     pos: {x:0, y:11, z:4}
 };
 export const initialShipPos = {
@@ -14,3 +14,4 @@ export const initialShipPos = {
 
 // x:0, y:50, z:0
 //x:0, y:11, z:4
+//35

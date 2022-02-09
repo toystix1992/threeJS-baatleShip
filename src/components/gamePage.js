@@ -6,23 +6,13 @@ import {gameIntersect} from '../helpers/intersect';
 import {plane} from '../helpers/mesh/plane';
 import {navigateGameZone} from '../controller/gameController';
 import setedShipsPos from '../storage/setedShipsPos';
-//import {shoots} from '../storage/gameStarage';
-// import {TextureLoader} from 'three';
+import {hitCounter} from '../controller/domManipulaton';
 
-const shipsCounterOne = document.querySelector('.ships-counter-one');
-const shipsCounterTwo = document.querySelector('.ships-counter-two');
+const shipsCounter = document.querySelector('.ships-counter');
 let intersect;
 let isClickEnable = true;
-const bias = {
-    playerOne: {
-        biasX: 0,
-        biasZ: 10
-    },
-    playerTwo: {
-        biasX: 10,
-        biasZ: 10
-    }
-}
+
+
 export const gamePage = (scene) => {
     scene.add(firstGameGround);
     scene.add(secondGameGround);
@@ -31,14 +21,15 @@ export const gamePage = (scene) => {
     // firstGameGround.add(aim);
 };
 export const getShipsInGame = () => {
+    shipsCounter.classList.remove('counter-hide');
     setedShipsPos.secondPlayer.forEach(ship => {
-        ship[1].forEach((pos,idx) => {
+        ship[1].forEach((pos) => {
             const redPlane = plane(0.9, 0.9, {
                 color: 0xff0000,
                 opacity: 0,
                 transparent: true
             });
-            redPlane.name = `${ship[0]}${idx}`;
+            redPlane.name = ship[0];
             redPlane.position.set(
                 pos.x,
                 pos.y,
@@ -66,21 +57,15 @@ export const getShipsInGame = () => {
 };
 const findGroundIntersecnts = async () => {
     if (getStage() === 'game') {
-        if (getPlayer() === 'first') {
-            shipsCounterOne.classList.remove('counter-hide');
-            shipsCounterTwo.classList.add('counter-hide');
-        } else {
-            shipsCounterTwo.classList.remove('counter-hide');
-            shipsCounterOne.classList.add('counter-hide');
-        }
         intersect = gameIntersect();
         if (intersect.length > 0 && !intersect[0].object.isClicked && isClickEnable) {
             intersect[0].object.isClicked = true;
             intersect[0].object.material.opacity = 1;
+            hitCounter(getPlayer(), intersect[0].object.name);
             if(intersect[0].object.name.length < 3) {
                 isClickEnable = false;
-                console.log(intersect[0].object.name);
                 await navigateGameZone();
+                hitCounter(getPlayer(), intersect[0].object.name);
                 isClickEnable = true;
             }
         }
@@ -90,75 +75,13 @@ const findGroundIntersecnts = async () => {
 document.addEventListener('pointerdown', findGroundIntersecnts);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const texture = new TextureLoader()
-// .load('textures/buttons/aim.png');
-// const aim = plane(1, 1, {map: texture});
-// aim.position.set(0.5, 0.5, 0.01);
-
-
-
-
-// const moveAim = (e) => {
-//     if (checkFieldBorders(aim, e.code)) {
-//         if (e.code === 'KeyD') {
-//             aim.position.x = aim.position.x += 1;
-//         } else if (e.code === 'KeyA') {
-//             aim.position.x = aim.position.x -= 1;
-//         } else if (e.code === 'KeyW') {
-//             aim.position.y = aim.position.y += 1;
-//         } else if (e.code === 'KeyS') {
-//             aim.position.y = aim.position.y -= 1;
-//         }
+// const bias = {
+//     playerOne: {
+//         biasX: 0,
+//         biasZ: 10
+//     },
+//     playerTwo: {
+//         biasX: 10,
+//         biasZ: 10
 //     }
-//     if (e.code === 'KeyE') {
-//         if (shoot(aim.position, player)) {
-//             if(player === 'first') {
-//                 shoots.firs.hit.push(aim.position);
-//             } else {
-//                 shoots.second.hit.push(aim.position);
-//             }
-//             const redPlane = plane(0.9, 0.9, {
-//                 color: 0xff0000
-//             });
-//             firstSetGround.add(redPlane);
-//             redPlane.position.x = aim.position.x;
-//             redPlane.position.y = aim.position.y;
-//             redPlane.position.z = aim.position.z;
-//             console.log(firstSetGround);
-//         } else {
-//             const whitePlane = plane(0.9, 0.9, {
-//                 color: 0xffffffff
-//             });
-//             whitePlane.position.x = aim.position.x;
-//             whitePlane.position.y = aim.position.y;
-//             whitePlane.position.z = aim.position.z;
-//             firstSetGround.add(whitePlane);
-//             // alert('мимо!!!')
-//             // if(player === 'first') {
-//             //     shoots.firs.miss.push(aim.position);
-//             //     getPage('gameTwo');
-//             // } else {
-//             //     shoots.second.miss.push(aim.position);
-//             //     getPage('gameOne');
-//             // }
-//             // ground.remove.apply(ground, ground.children);
-//             // prevShots(player);
-//         }
-//         console.log(player, shoots);
-//     }
-// };
-
-// document.addEventListener('keypress', moveAim);
+// }

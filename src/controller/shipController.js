@@ -4,14 +4,14 @@ import {plane} from '../helpers/mesh/plane';
 import {firstSetWater, secondSetWater} from '../view/waterGeometry';
 import {getPlayer, setPlayer} from '../storage/player';
 import {setStage} from '../storage/stage';
+import {addTitleDiscription} from './domManipulaton';
 import setedShipsPos from '../storage/setedShipsPos';
 import camera from '../helpers/initial/camera';
 import {disableShipsIntersects} from '../view/ships';
 import gsap from 'gsap';
 import {getShipsInGame} from '../components/gamePage';
 
-const body = document.querySelector('body');
-const playerTitle = document.querySelector('.player-title');
+
 const setShips = document.querySelector('.set-btn');
 let shipsZone = [];
 let curentShip, curWater, intersect;
@@ -22,11 +22,7 @@ const config = {
     transparent: true
 };
 
-const addDiscription = (PlayerNumber) => {
-    const element = `<h1 class="player-title"> ${PlayerNumber} player set ships!</h1>`;
-    body.insertAdjacentHTML( 'beforeend', element );
-};
-addDiscription(getPlayer());
+addTitleDiscription(getPlayer(), 'player places ships');
 export const checkFieldBorders = (choosenShip, x, y, isTurned) => {
     if (
         choosenShip.name === 'smallShipOne' ||
@@ -237,11 +233,13 @@ const navigateShipZone = async () => {
 
 const onSetShipsSetBtn = async () => {
     if (getPlayer() === 'first') {
+        addTitleDiscription(getPlayer(), 'player places ships');
         curWater = firstSetWater;
         setedShipsPos.firstPlayer = shipsZone;
         lightShipZone();
         await navigateShipZone();
         setPlayer('second');
+        addTitleDiscription(getPlayer(), 'player places ships');
     } else {
         curWater = secondSetWater;
         setedShipsPos.secondPlayer = shipsZone;
@@ -249,8 +247,8 @@ const onSetShipsSetBtn = async () => {
         await navigateShipZone();
         setPlayer('first');
         getShipsInGame();
+        addTitleDiscription(getPlayer(), 'player take a shot');
     }
-    addDiscription(getPlayer());
     shipsZone = [];
 }
 

@@ -23,6 +23,7 @@ const onWindowResize = () => {
     resize(camera, renderer);
 };
 
+
 const animate = () => {
     const loading = getPropertyFromStorage("loading");
     if (loading) {
